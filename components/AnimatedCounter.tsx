@@ -24,6 +24,7 @@ export function AnimatedCounter({
   useMotionValueEvent(spring, "change", (latest) => setDisplayValue(latest));
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

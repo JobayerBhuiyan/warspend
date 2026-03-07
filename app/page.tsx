@@ -28,7 +28,7 @@ export default async function Home() {
             {data.trackerConfig.strikesStartLabel}
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-4xl">
-            Iran War Cost Tracker
+            Iran War Spend Tracker
           </h1>
           <p className="mt-1 text-lg text-zinc-600 dark:text-zinc-400">
             Estimated U.S. Taxpayer Spending
@@ -242,8 +242,13 @@ export default async function Home() {
       </main>
 
       <footer className="mt-8 border-t border-zinc-200 py-6 dark:border-zinc-800">
-        <div className="mx-auto max-w-4xl px-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
-          War Cost Tracker · Built for transparency
+        <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 px-4 text-sm text-zinc-500 dark:text-zinc-400 sm:flex-row">
+          <p>War Spend Tracker · Built for transparency</p>
+          <div className="flex gap-4">
+            <a href="/privacy" className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+              Privacy Policy
+            </a>
+          </div>
         </div>
       </footer>
     </div>

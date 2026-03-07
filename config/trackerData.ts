@@ -1,5 +1,5 @@
 /**
- * Centralized configuration for the War Cost Tracker.
+ * Centralized configuration for the War Spend Tracker.
  * Used as FALLBACK when Sanity CMS is unavailable (missing env vars or fetch error).
  * When Sanity is configured, data is fetched from CMS and these values are ignored.
  */

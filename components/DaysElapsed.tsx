@@ -21,6 +21,7 @@ export function DaysElapsed({ startDateIso, className = "" }: DaysElapsedProps) 
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

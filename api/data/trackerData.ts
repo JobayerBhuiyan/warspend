@@ -3,7 +3,7 @@
  * Edit these values to update what the frontend displays.
  */
 export const trackerData = {
-    title: "Iran War Cost Tracker",
+    title: "Iran War Spend Tracker",
     startDateIso: "2026-02-28T00:00:00Z",
     dailyCostUsd: 1_000_000_000,
     operationName: "Operation Epic Fury",

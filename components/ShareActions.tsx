@@ -8,6 +8,7 @@ export function ShareActions() {
   const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCanShare(typeof navigator !== "undefined" && !!navigator.share);
   }, []);
 
@@ -25,7 +26,7 @@ export function ShareActions() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Iran War Cost Tracker",
+          title: "Iran War Spend Tracker",
           text: "Live estimate of U.S. taxpayer spending on military operations.",
           url: window.location.href,
         });

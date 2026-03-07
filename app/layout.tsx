@@ -16,21 +16,21 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://iran-cost-ticker.com";
 
 export const metadata: Metadata = {
-  title: "Iran War Cost Tracker — Live Estimate of U.S. Taxpayer Spending",
+  title: "Iran War Spend Tracker — Live Estimate of U.S. Taxpayer Spending",
   description:
     "Live estimate of U.S. taxpayer spending on military operations. Based on the Pentagon's preliminary estimate of $1 billion per day.",
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "Iran War Cost Tracker — Live Estimate of U.S. Taxpayer Spending",
+    title: "Iran War Spend Tracker — Live Estimate of U.S. Taxpayer Spending",
     description:
       "Live estimate of U.S. taxpayer spending on military operations. Based on the Pentagon's preliminary estimate of $1 billion per day.",
     url: siteUrl,
-    siteName: "Iran War Cost Tracker",
+    siteName: "Iran War Spend Tracker",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Iran War Cost Tracker — Live Estimate of U.S. Taxpayer Spending",
+    title: "Iran War Spend Tracker — Live Estimate of U.S. Taxpayer Spending",
     description:
       "Live estimate of U.S. taxpayer spending on military operations.",
   },
