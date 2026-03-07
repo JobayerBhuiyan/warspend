@@ -3,7 +3,8 @@ import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { DaysElapsed } from "@/components/DaysElapsed";
 import { CostComparisonChart } from "@/components/CostComparisonChart";
 import { StatCard } from "@/components/StatCard";
-import { ShareActions } from "@/components/ShareActions";
+import { CostRates } from "@/components/CostRates";
+import { CostTimeline } from "@/components/CostTimeline";
 import {
   Users,
   Swords,
@@ -32,9 +33,6 @@ export default async function Home() {
           <p className="mt-1 text-lg text-zinc-600 dark:text-zinc-400">
             Estimated U.S. Taxpayer Spending
           </p>
-          <div className="mt-4">
-            <ShareActions />
-          </div>
         </div>
       </header>
 
@@ -64,6 +62,11 @@ export default async function Home() {
             · ${(data.trackerConfig.dailyCostUsd / 1e9).toFixed(1)} billion / day ·
             Pentagon estimate via congressional official
           </p>
+        </section>
+
+        {/* Cost Rates and Sharing */}
+        <section className="mt-8">
+          <CostRates dailyCostUsd={data.trackerConfig.dailyCostUsd} />
         </section>
 
         {/* Real cost warning */}
@@ -135,10 +138,9 @@ export default async function Home() {
 
         {/* What has that money bought / Human cost */}
         <section className="mt-10">
-          <h2 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-            What Has That Money Bought
-          </h2>
-          <h3 className="mb-4 text-lg font-medium text-zinc-800 dark:text-zinc-200">
+          <CostTimeline />
+
+          <h3 className="mt-12 mb-4 text-lg font-medium text-zinc-800 dark:text-zinc-200">
             The Human Cost
           </h3>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
