@@ -8,6 +8,21 @@ import {
   COST_COMPARISON_CHART_DATA,
 } from "@/config/trackerData";
 
+export type NewsItem = {
+  title: string;
+  link: string;
+  source: string;
+  pubDate: string;
+};
+
+export type TimelineEvent = {
+  date: string;
+  title: string;
+  description: string;
+  cost?: string | null;
+  isMajor?: boolean;
+};
+
 export type TrackerData = {
   startDateIso: string;
   trackerConfig: {
@@ -41,6 +56,8 @@ export type TrackerData = {
   methodologyText: string;
   methodologyFooter: string;
   lastUpdated?: string;
+  latestNews: NewsItem[];
+  timelineEvents: TimelineEvent[];
 };
 
 /** Shape of JSON returned by the Railway API */
@@ -72,6 +89,8 @@ type ApiTrackerData = {
   otherEstimates?: { source: string; label: string; value: string }[];
   methodologyText?: string;
   methodologyFooter?: string;
+  latestNews?: NewsItem[];
+  newTimelineEvents?: TimelineEvent[];
   _servedAt?: string;
 };
 
@@ -124,6 +143,8 @@ function mapApiToTrackerData(data: ApiTrackerData): TrackerData {
       data.methodologyFooter ??
       "This tracker exists because the public deserves real-time transparency about the cost of military operations — not just after-the-fact reports years later. The counter uses the Pentagon's own preliminary estimate of $1 billion per day. Independent analyses suggest the true cost may be significantly higher.",
     lastUpdated: data._servedAt,
+    latestNews: data.latestNews ?? [],
+    timelineEvents: data.newTimelineEvents ?? [],
   };
 }
 
@@ -149,6 +170,8 @@ function getFallbackData(): TrackerData {
       "Our bottom-up cost model: 13 aircraft types, naval deployments, munitions tracking, and sources. Nancy Youssef (WSJ) — Pentagon preliminary estimate: $1B/day via congressional official. NYT DealBook (Niko Gallogly, Mar 4 2026) — Kavanagh/Defense Priorities interceptor analysis. Penn Wharton Budget Model (Kent Smetters) — $40B–$95B direct, up to $210B economic impact. Center for American Progress — >$5B through Day 4. DoD Comptroller FY2024/25 reimbursable flight-hour rates. Congressional Budget Office (CBO) cost reports. Government Accountability Office (GAO) sustainment reports. Brown University Costs of War Project. DoD/CENTCOM official statements. AP, Reuters, AFP, Al Jazeera reporting.",
     methodologyFooter:
       "This tracker exists because the public deserves real-time transparency about the cost of military operations — not just after-the-fact reports years later. The counter uses the Pentagon's own preliminary estimate of $1 billion per day. Independent analyses suggest the true cost may be significantly higher.",
+    latestNews: [],
+    timelineEvents: [],
   };
 }
 

@@ -48,13 +48,24 @@ export const timelineEvents = [
     },
 ];
 
-export function CostTimeline() {
+type TimelineEvent = {
+    date: string;
+    title: string;
+    description: string;
+    cost?: string | null;
+    isMajor?: boolean;
+};
+
+export function CostTimeline({ extraEvents = [] }: { extraEvents?: TimelineEvent[] }) {
+    // Merge static events with any new events from the API
+    const allEvents = [...timelineEvents, ...extraEvents];
+
     return (
         <div className="w-full max-w-3xl font-mono text-zinc-300">
             <h2 className="text-xs font-semibold tracking-[0.2em] mb-8 text-zinc-400">WHAT HAS THAT MONEY BOUGHT</h2>
 
             <div className="relative border-l border-zinc-700/50 pl-6 pb-4">
-                {timelineEvents.map((event, i) => (
+                {allEvents.map((event, i) => (
                     <div key={i} className="mb-10 last:mb-0 relative">
                         <div className={`absolute -left-[30px] top-1.5 h-2 w-2 rounded-full ring-4 ring-[#101010] ${event.isMajor ? "bg-red-500" : "bg-zinc-600"}`}></div>
 

@@ -10,7 +10,8 @@
     "dependencies": {
         "@google/genai": "^1.44.0",
         "cors": "^2.8.5",
-        "express": "^5.1.0"
+        "express": "^5.1.0",
+        "rss-parser": "^3.13.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",

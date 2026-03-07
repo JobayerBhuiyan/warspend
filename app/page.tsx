@@ -5,6 +5,7 @@ import { CostComparisonChart } from "@/components/CostComparisonChart";
 import { StatCard } from "@/components/StatCard";
 import { CostRates } from "@/components/CostRates";
 import { CostTimeline } from "@/components/CostTimeline";
+import { LatestNews } from "@/components/LatestNews";
 import {
   Users,
   Swords,
@@ -13,7 +14,7 @@ import {
   Phone,
 } from "lucide-react";
 
-export const revalidate = 3600;
+export const revalidate = 900;
 
 export default async function Home() {
   const data = await getTrackerData();
@@ -138,7 +139,7 @@ export default async function Home() {
 
         {/* What has that money bought / Human cost */}
         <section className="mt-10">
-          <CostTimeline />
+          <CostTimeline extraEvents={data.timelineEvents} />
 
           <h3 className="mt-12 mb-4 text-lg font-medium text-zinc-800 dark:text-zinc-200">
             The Human Cost
@@ -194,6 +195,9 @@ export default async function Home() {
             ))}
           </div>
         </section>
+
+        {/* Latest News */}
+        <LatestNews items={data.latestNews} />
 
         {/* Methodology & sources */}
         <section className="mt-10 rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
