@@ -43,12 +43,12 @@ export const STOCKPILE = {
 
 /** Human cost — update as official/verified numbers become available */
 export const HUMAN_COST = {
-  usKilled: 0,
-  usWounded: 0,
-  iranianMilitaryKilled: 0,
-  iranianMilitaryNote: "incl. senior leadership",
-  iranianCiviliansKilled: 0,
-  iranianCiviliansWounded: 0,
+  usKilled: 6,
+  usWounded: 18,
+  iranianMilitaryKilled: 1_300,
+  iranianMilitaryNote: "incl. senior leadership & IRGC commanders",
+  iranianCiviliansKilled: 1_332,
+  iranianCiviliansWounded: 5_000,
 } as const;
 
 /** Other estimates from various sources */
@@ -62,6 +62,16 @@ export const OTHER_ESTIMATES = [
     source: "Penn Wharton",
     label: "Direct budgetary cost",
     value: "$40B–$95B",
+  },
+  {
+    source: "CSIS (Cancian & Park)",
+    label: "First 100 hours",
+    value: "$3.7B",
+  },
+  {
+    source: "CSIS",
+    label: "Daily cost estimate",
+    value: "$891.4M/day",
   },
   {
     source: "Center for American Progress",

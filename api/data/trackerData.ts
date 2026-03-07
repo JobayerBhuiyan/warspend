@@ -23,12 +23,12 @@ export const trackerData = {
     },
 
     humanCost: {
-        usKilled: 0,
-        usWounded: 0,
-        iranianMilitaryKilled: 0,
-        iranianMilitaryNote: "incl. senior leadership",
-        iranianCiviliansKilled: 0,
-        iranianCiviliansWounded: 0,
+        usKilled: 6,
+        usWounded: 18,
+        iranianMilitaryKilled: 1_300,
+        iranianMilitaryNote: "incl. senior leadership & IRGC commanders",
+        iranianCiviliansKilled: 1_332,
+        iranianCiviliansWounded: 5_000,
     },
 
     otherEstimates: [
@@ -41,6 +41,16 @@ export const trackerData = {
             source: "Penn Wharton",
             label: "Direct budgetary cost",
             value: "$40B–$95B",
+        },
+        {
+            source: "CSIS (Cancian & Park)",
+            label: "First 100 hours",
+            value: "$3.7B",
+        },
+        {
+            source: "CSIS",
+            label: "Daily cost estimate",
+            value: "$891.4M/day",
         },
         {
             source: "Center for American Progress",
@@ -60,8 +70,8 @@ export const trackerData = {
     ],
 
     methodologyText:
-        "Our bottom-up cost model: 13 aircraft types, naval deployments, munitions tracking, and sources. Nancy Youssef (WSJ) — Pentagon preliminary estimate: $1B/day via congressional official. NYT DealBook (Niko Gallogly, Mar 4 2026) — Kavanagh/Defense Priorities interceptor analysis. Penn Wharton Budget Model (Kent Smetters) — $40B–$95B direct, up to $210B economic impact. Center for American Progress — >$5B through Day 4. DoD Comptroller FY2024/25 reimbursable flight-hour rates. Congressional Budget Office (CBO) cost reports. Government Accountability Office (GAO) sustainment reports. Brown University Costs of War Project. DoD/CENTCOM official statements. AP, Reuters, AFP, Al Jazeera reporting.",
+        "Our bottom-up cost model: 13 aircraft types, naval deployments, munitions tracking, and sources. Nancy Youssef (WSJ) — Pentagon preliminary estimate: $1B/day via congressional official. CSIS (Cancian & Park, Mar 5 2026) — $3.7B for first 100 hours, $891.4M/day average. NYT DealBook (Niko Gallogly, Mar 4 2026) — Kavanagh/Defense Priorities interceptor analysis. Penn Wharton Budget Model (Kent Smetters) — $40B–$95B direct, up to $210B economic impact. Center for American Progress — >$5B through Day 4. DoD Comptroller FY2024/25 reimbursable flight-hour rates. Congressional Budget Office (CBO) cost reports. Government Accountability Office (GAO) sustainment reports. Brown University Costs of War Project. HRANA & Iranian Red Crescent casualty data. DoD/CENTCOM official statements. AP, Reuters, AFP, Al Jazeera, Military Times reporting.",
 
     methodologyFooter:
-        "This tracker exists because the public deserves real-time transparency about the cost of military operations — not just after-the-fact reports years later. The counter uses the Pentagon's own preliminary estimate of $1 billion per day. Independent analyses suggest the true cost may be significantly higher.",
+        "This tracker exists because the public deserves real-time transparency about the cost of military operations — not just after-the-fact reports years later. The counter uses the Pentagon's own preliminary estimate of $1 billion per day. CSIS independently estimates an average of $891.4 million per day for the first 100 hours, with $3.5B of that unbudgeted. Independent analyses suggest the true cost may be significantly higher.",
 };

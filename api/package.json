@@ -3,11 +3,12 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "dev": "npx tsx watch index.ts",
+        "dev": "npx tsx watch --env-file=../.env.local index.ts",
         "start": "npx tsx index.ts",
         "build": "echo 'No build step needed — tsx runs TypeScript directly'"
     },
     "dependencies": {
+        "@google/genai": "^1.44.0",
         "cors": "^2.8.5",
         "express": "^5.1.0"
     },
