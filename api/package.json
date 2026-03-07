@@ -1,0 +1,21 @@
+{
+    "name": "warspend-api",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "npx tsx watch index.ts",
+        "start": "npx tsx index.ts",
+        "build": "echo 'No build step needed — tsx runs TypeScript directly'"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^5.1.0"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/node": "^20.0.0",
+        "tsx": "^4.19.0",
+        "typescript": "^5.0.0"
+    }
+}
