@@ -36,7 +36,7 @@ export default function PrivacyPolicy() {
                             1. Introduction
                         </h2>
                         <p className="text-zinc-700 dark:text-zinc-300">
-                            Welcome to the Iran War Spend Tracker (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share your personal information when you visit our website (iran-cost-ticker.com and warspend.com) and use our services.
+                            Welcome to the Iran War Spend Tracker (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share your personal information when you visit our website (warspend.com) and use our services.
                         </p>
                     </section>
 

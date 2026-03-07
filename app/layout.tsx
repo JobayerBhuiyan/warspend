@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://iran-cost-ticker.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://warspend.com";
 
 export const metadata: Metadata = {
   title: "Iran War Spend Tracker — Live Estimate of U.S. Taxpayer Spending",
