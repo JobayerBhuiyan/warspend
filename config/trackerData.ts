@@ -59,7 +59,7 @@ export const OTHER_ESTIMATES = [
     value: "up to $210B",
   },
   {
-    source: "Penn Wharton",
+    source: "Penn Wharton (Direct)",
     label: "Direct budgetary cost",
     value: "$40B–$95B",
   },
