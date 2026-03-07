@@ -1,4 +1,4 @@
-# Iran War Cost Tracker
+# Iran War Spend Tracker
 
 Live estimate of U.S. taxpayer spending on military operations. Based on the Pentagon's preliminary estimate of $1 billion per day.
 
