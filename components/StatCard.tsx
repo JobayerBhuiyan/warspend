@@ -14,7 +14,7 @@ export function StatCard({
   subtitle,
   icon,
   className = "",
-  delay = 0,
+  delay: _delay = 0,
   accentColor = "rgba(239, 68, 68, 0.4)",
 }: StatCardProps) {
   return (

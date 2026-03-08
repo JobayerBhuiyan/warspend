@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Home, Brain, Baby, GraduationCap } from "lucide-react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;

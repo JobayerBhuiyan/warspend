@@ -40,7 +40,7 @@ export function LatestNews({ items }: { items: NewsItem[] }) {
                 </span>
             </div>
             <div className="space-y-2">
-                {items.slice(0, 10).map((item, i) => (
+                {items.slice(0, 10).map((item) => (
                     <a
                         key={item.link}
                         href={item.link}

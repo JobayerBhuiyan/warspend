@@ -18,7 +18,7 @@ export const logger = pino({
 
 export const httpLogger = pinoHttp({
   logger,
-  customProps: (req, res) => ({
+  customProps: (_req, _res) => ({
     context: "http",
   }),
 });

@@ -20,15 +20,14 @@ export function AnimatedCounter({
   const [displayValue, setDisplayValue] = useState(0);
 
   // Native spring physics state
-  const physicsRef = useRef({
-    value: 0,
-    velocity: 0,
-    target: 0,
-    lastTime: performance.now(),
-  });
+  const physicsRef = useRef<{
+    value: number;
+    velocity: number;
+    target: number;
+    lastTime: number;
+  } | null>(null);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -38,7 +37,6 @@ export function AnimatedCounter({
     const stiffness = 30; // Equivalent to Framer Motion stiffness
     const damping = 20; // Equivalent to Framer Motion damping
     let animationFrameId: number;
-    let targetIntervalId: number;
 
     const computeCost = () => {
       const now = Date.now();
@@ -47,12 +45,20 @@ export function AnimatedCounter({
       return days * dailyCostUsd;
     };
 
-    // Initial target set
+    // Initialize physics state on first run
+    if (!physicsRef.current) {
+      physicsRef.current = {
+        value: 0,
+        velocity: 0,
+        target: 0,
+        lastTime: performance.now(),
+      };
+    }
     physicsRef.current.target = computeCost();
 
     // Spring animation loop
     const animate = (time: number) => {
-      const state = physicsRef.current;
+      const state = physicsRef.current!;
 
       const dt = Math.min((time - state.lastTime) / 1000, 0.064);
       state.lastTime = time;
