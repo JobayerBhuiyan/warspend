@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Home, Brain, Baby, GraduationCap } from "lucide-react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const TOTAL_US_HOMELESS = 653104; // HUD 2023 AHAR estimate
 
 interface AlternativeMetricsProps {
   startDateIso: string;
@@ -81,7 +82,7 @@ export function AlternativeMetrics({
       icon: Home,
       color: "text-emerald-400",
       border: "rgba(16, 185, 129, 0.4)",
-      desc: "for one year",
+      desc: `for 1yr (${((metrics.homeless / TOTAL_US_HOMELESS) * 100).toFixed(1)}% of US total)`,
     },
     {
       label: "Mental Health Treated",
@@ -139,10 +140,64 @@ export function AlternativeMetrics({
           );
         })}
       </div>
-      <p className="mt-4 text-[10px] text-zinc-600 text-center font-mono">
-        Estimates based on: Housing (~$40k/yr), Mental Health Care (~$10k/yr), 
-        Child Nutrition (~$106/yr), Student Debt (~$37k/borrower).
-      </p>
+      <div className="mt-5 text-[10px] text-zinc-500 text-center font-mono max-w-4xl mx-auto space-y-1.5">
+        <p>
+          <strong>Housing:</strong> ~$40k/yr (
+          <a
+            href="https://endhomelessness.org/resource/ending-chronic-homelessness-saves-taxpayers-money-2/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-300 underline underline-offset-2"
+          >
+            Permanent Supportive Housing est.
+          </a>
+          ) •{" "}
+          <strong>Mental Health:</strong> ~$10k/yr (
+          <a
+            href="https://www.psychiatry.org/patients-families/what-is-mental-illness"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-300 underline underline-offset-2"
+          >
+            Intensive Outpatient Care
+          </a>
+          )
+        </p>
+        <p>
+          <strong>Child Nutrition:</strong> ~$106/yr (
+          <a
+            href="https://www.fmsc.org/about-us"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-300 underline underline-offset-2"
+          >
+            $0.29/meal via Feed My Starving Children
+          </a>
+          ) •{" "}
+          <strong>Student Debt:</strong> ~$37k/borrower (
+          <a
+            href="https://educationdata.org/student-loan-debt-statistics"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-300 underline underline-offset-2"
+          >
+            Education Data Initiative
+          </a>
+          )
+        </p>
+        <p className="text-zinc-600/80 mt-2">
+          * US homeless population baseline: 653,104 (
+          <a
+            href="https://www.huduser.gov/portal/sites/default/files/pdf/2023-AHAR-Part-1.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-400 underline underline-offset-2"
+          >
+            HUD 2023 AHAR Report
+          </a>
+          )
+        </p>
+      </div>
     </div>
   );
 }
