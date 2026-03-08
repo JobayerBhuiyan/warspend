@@ -38,5 +38,14 @@
     "*.{json,css,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "browserslist": [
+    "Chrome >= 87",
+    "Firefox >= 78",
+    "Safari >= 14",
+    "Edge >= 88",
+    "iOS >= 14",
+    "not dead",
+    "not op_mini all"
+  ]
 }

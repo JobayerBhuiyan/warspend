@@ -113,23 +113,22 @@ body::before {
 
 @keyframes shimmer {
   0% {
-    background-position: -200% 0;
+    transform: translateX(-100%);
   }
 
   100% {
-    background-position: 200% 0;
+    transform: translateX(100%);
   }
 }
 
 @keyframes gradient-shift {
-
   0%,
   100% {
-    background-position: 0% 50%;
+    opacity: 1;
   }
 
   50% {
-    background-position: 100% 50%;
+    opacity: 0.7;
   }
 }
 
@@ -167,14 +166,22 @@ body::before {
 }
 
 .animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
-  background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-gradient-shift {
-  background-size: 200% 200%;
   animation: gradient-shift 6s ease infinite;
+  will-change: opacity;
 }
 
 .animate-float {
@@ -231,6 +238,7 @@ body::before {
 .scroll-reveal {
   opacity: 0;
   transition: opacity 0.6s cubic-bezier(0.21, 0.47, 0.32, 0.98), transform 0.6s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  will-change: opacity, transform;
 }
 
 .reveal-up {
@@ -252,4 +260,5 @@ body::before {
 .scroll-reveal-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0) !important;
+  will-change: auto;
 }

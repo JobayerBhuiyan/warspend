@@ -131,7 +131,7 @@ export function AnimatedCounter({
 
   return (
     <span
-      className={`tabular-nums inline-block transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] ${mounted ? "opacity-100 translate-y-0 blur-none" : "opacity-0 translate-y-2 blur-[8px]"
+      className={`tabular-nums inline-block transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] will-change-[opacity,transform] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
         } ${className}`}
       style={{
         textShadow: "0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.1)",
