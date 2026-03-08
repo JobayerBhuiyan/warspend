@@ -40,11 +40,11 @@
     ]
   },
   "browserslist": [
-    "Chrome >= 87",
-    "Firefox >= 78",
-    "Safari >= 14",
-    "Edge >= 88",
-    "iOS >= 14",
+    "Chrome >= 96",
+    "Firefox >= 95",
+    "Safari >= 15.4",
+    "Edge >= 96",
+    "iOS >= 15.4",
     "not dead",
     "not op_mini all"
   ]

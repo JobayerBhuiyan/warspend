@@ -1,6 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
+// Shared singleton IntersectionObserver — avoids creating 12+ observers
+const observedElements = new Map<Element, () => void>();
+let sharedObserver: IntersectionObserver | null = null;
+
+function getSharedObserver(): IntersectionObserver {
+    if (!sharedObserver) {
+        sharedObserver = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        const callback = observedElements.get(entry.target);
+                        if (callback) {
+                            callback();
+                            sharedObserver!.unobserve(entry.target);
+                            observedElements.delete(entry.target);
+                        }
+                    }
+                }
+            },
+            { rootMargin: "0px 0px -80px 0px" }
+        );
+    }
+    return sharedObserver;
+}
 
 interface ScrollRevealProps {
     children: React.ReactNode;
@@ -16,33 +41,30 @@ export function ScrollReveal({
     direction = "up",
 }: ScrollRevealProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
-            },
-            { rootMargin: "0px 0px -80px 0px" }
-        );
+        const el = ref.current;
+        if (!el) return;
 
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
+        const observer = getSharedObserver();
 
-        return () => observer.disconnect();
+        observedElements.set(el, () => {
+            el.classList.remove("scroll-reveal");
+            el.classList.add("scroll-reveal-visible");
+        });
+
+        observer.observe(el);
+
+        return () => {
+            observer.unobserve(el);
+            observedElements.delete(el);
+        };
     }, []);
-
-    const revealClass = isVisible ? "scroll-reveal-visible" : "scroll-reveal";
-    const dirClass = `reveal-${direction}`;
 
     return (
         <div
             ref={ref}
-            className={`${className} ${revealClass} ${dirClass}`}
+            className={`${className} scroll-reveal reveal-${direction}`}
             style={{ transitionDelay: `${delay}s` }}
         >
             {children}

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Home, Brain, Baby, GraduationCap } from "lucide-react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const TOTAL_US_HOMELESS = 770000; // HUD 2024 AHAR estimate
+const numFmt = new Intl.NumberFormat("en-US");
 
 interface AlternativeMetricsProps {
   startDateIso: string;
@@ -23,21 +24,19 @@ export function AlternativeMetrics({
   costs,
 }: AlternativeMetricsProps) {
   const startTime = new Date(startDateIso).getTime();
-  const [mounted, setMounted] = useState(false);
-  const [metrics, setMetrics] = useState({
-    homeless: 0,
-    mentalHealth: 0,
-    children: 0,
-    students: 0,
-  });
+  const homelessRef = useRef<HTMLParagraphElement>(null);
+  const mentalRef = useRef<HTMLParagraphElement>(null);
+  const childrenRef = useRef<HTMLParagraphElement>(null);
+  const studentsRef = useRef<HTMLParagraphElement>(null);
+  const homelessDescRef = useRef<HTMLParagraphElement>(null);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
+    if (mountedRef.current) return;
+    mountedRef.current = true;
 
-  useEffect(() => {
-    if (!mounted) return;
+    const valueRefs = [homelessRef, mentalRef, childrenRef, studentsRef];
+    const costDivisors = [costs.homelessHoused, costs.mentalHealthTreated, costs.childrenFed, costs.studentLoansForgiven];
 
     const update = () => {
       const now = Date.now();
@@ -45,12 +44,16 @@ export function AlternativeMetrics({
       const days = elapsed / MS_PER_DAY;
       const totalCostUsd = days * dailyCostUsd;
 
-      setMetrics({
-        homeless: Math.floor(totalCostUsd / costs.homelessHoused),
-        mentalHealth: Math.floor(totalCostUsd / costs.mentalHealthTreated),
-        children: Math.floor(totalCostUsd / costs.childrenFed),
-        students: Math.floor(totalCostUsd / costs.studentLoansForgiven),
-      });
+      for (let i = 0; i < 4; i++) {
+        const val = Math.floor(totalCostUsd / costDivisors[i]);
+        const ref = valueRefs[i];
+        if (ref.current) {
+          ref.current.textContent = numFmt.format(val);
+        }
+        if (i === 0 && homelessDescRef.current) {
+          homelessDescRef.current.textContent = `for 1yr (${((val / TOTAL_US_HOMELESS) * 100).toFixed(1)}% of US total)`;
+        }
+      }
     };
 
     update();
@@ -59,30 +62,21 @@ export function AlternativeMetrics({
     return () => {
       clearInterval(intervalId);
     };
-  }, [mounted, startTime, dailyCostUsd, costs]);
-
-  if (!mounted) {
-    return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="rounded-xl glass p-6 h-32 animate-pulse" />
-        ))}
-      </div>
-    );
-  }
+  }, [startTime, dailyCostUsd, costs]);
 
   const items = [
     {
       label: "Homeless Housed",
-      value: metrics.homeless,
+      ref: homelessRef,
+      descRef: homelessDescRef,
       icon: Home,
       color: "text-emerald-400",
       border: "rgba(16, 185, 129, 0.4)",
-      desc: `for 1yr (${((metrics.homeless / TOTAL_US_HOMELESS) * 100).toFixed(1)}% of US total)`,
+      desc: "for 1yr",
     },
     {
       label: "Mental Health Treated",
-      value: metrics.mentalHealth,
+      ref: mentalRef,
       icon: Brain,
       color: "text-purple-400",
       border: "rgba(168, 85, 247, 0.4)",
@@ -90,7 +84,7 @@ export function AlternativeMetrics({
     },
     {
       label: "Children Fed",
-      value: metrics.children,
+      ref: childrenRef,
       icon: Baby,
       color: "text-pink-400",
       border: "rgba(244, 114, 182, 0.4)",
@@ -98,7 +92,7 @@ export function AlternativeMetrics({
     },
     {
       label: "Student Loans Forgiven",
-      value: metrics.students,
+      ref: studentsRef,
       icon: GraduationCap,
       color: "text-sky-400",
       border: "rgba(56, 189, 248, 0.4)",
@@ -128,10 +122,10 @@ export function AlternativeMetrics({
               <p className="text-xs font-mono tracking-[0.1em] text-zinc-400 uppercase mb-2">
                 {item.label}
               </p>
-              <p className={`text-2xl font-bold ${item.color} tabular-nums`}>
-                {item.value.toLocaleString()}
+              <p ref={item.ref} className={`text-2xl font-bold ${item.color} tabular-nums`}>
+                0
               </p>
-              <p className="text-xs text-zinc-500 mt-1">{item.desc}</p>
+              <p ref={item.descRef} className="text-xs text-zinc-500 mt-1">{item.desc}</p>
             </div>
           );
         })}

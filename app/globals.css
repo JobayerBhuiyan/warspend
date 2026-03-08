@@ -153,11 +153,13 @@ body::before {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: 0 0 40px var(--accent-red-glow), 0 0 80px rgba(239, 68, 68, 0.2);
+  background: var(--accent-red-glow);
+  filter: blur(40px);
   animation: pulse-glow 3s ease-in-out infinite;
   will-change: opacity;
   pointer-events: none;
   z-index: -1;
+  contain: strict;
 }
 
 .animate-live-dot {
@@ -186,6 +188,7 @@ body::before {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ── Gradient text utility ────────────── */
@@ -261,4 +264,13 @@ body::before {
   opacity: 1;
   transform: translate3d(0, 0, 0) !important;
   will-change: auto;
+}
+
+/* ── Performance: containment ────────── */
+.section-divider {
+  contain: layout paint style;
+}
+
+.glow-card {
+  contain: layout style;
 }

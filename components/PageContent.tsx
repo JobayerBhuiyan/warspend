@@ -3,9 +3,7 @@
 import { useRealTimeData } from "@/components/RealTimeProvider";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { CountdownClock } from "@/components/CountdownClock";
-import { GasPriceTracker } from "@/components/GasPriceTracker";
 import { CostRates } from "@/components/CostRates";
-import { AlternativeMetrics } from "@/components/AlternativeMetrics";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { AdSense } from "@/components/AdSense";
 import dynamic from "next/dynamic";
@@ -16,6 +14,16 @@ import {
   Shield,
   Megaphone,
 } from "lucide-react";
+
+const AlternativeMetrics = dynamic(
+  () => import("@/components/AlternativeMetrics").then((mod) => mod.AlternativeMetrics),
+  { loading: () => <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">{[1,2,3,4].map(i => <div key={i} className="rounded-xl glass p-6 h-32 animate-pulse" />)}</div> }
+);
+
+const GasPriceTracker = dynamic(
+  () => import("@/components/GasPriceTracker").then((mod) => mod.GasPriceTracker),
+  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> }
+);
 
 const CostComparisonChart = dynamic(
   () => import("@/components/CostComparisonChart").then((mod) => mod.CostComparisonChart),

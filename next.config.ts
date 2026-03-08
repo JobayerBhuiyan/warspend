@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
+  devIndicators: false,
   async headers() {
     return [
       {

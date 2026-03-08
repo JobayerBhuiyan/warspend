@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -10,14 +10,22 @@ interface AnimatedCounterProps {
   className?: string;
 }
 
+// Memoized formatter — avoids toLocaleString overhead on every frame
+const currencyFmt = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 export function AnimatedCounter({
   startDateIso,
   dailyCostUsd,
   className = "",
 }: AnimatedCounterProps) {
   const startTime = new Date(startDateIso).getTime();
-  const [mounted, setMounted] = useState(false);
-  const [displayValue, setDisplayValue] = useState(0);
+  const spanRef = useRef<HTMLSpanElement>(null);
+  const mountedRef = useRef(false);
 
   // Native spring physics state
   const physicsRef = useRef<{
@@ -27,16 +35,27 @@ export function AnimatedCounter({
     lastTime: number;
   } | null>(null);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
+  // Direct DOM update — bypasses React reconciliation entirely
+  const updateDOM = useCallback((value: number) => {
+    if (spanRef.current) {
+      spanRef.current.textContent = currencyFmt.format(Math.round(value));
+    }
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
+    if (mountedRef.current) return;
+    mountedRef.current = true;
 
-    const stiffness = 30; // Equivalent to Framer Motion stiffness
-    const damping = 20; // Equivalent to Framer Motion damping
+    const el = spanRef.current;
+    if (el) {
+      requestAnimationFrame(() => {
+        el.classList.remove("opacity-0", "translate-y-2");
+        el.classList.add("opacity-100", "translate-y-0");
+      });
+    }
+
+    const stiffness = 30;
+    const damping = 20;
     let animationFrameId: number;
 
     const computeCost = () => {
@@ -46,21 +65,16 @@ export function AnimatedCounter({
       return days * dailyCostUsd;
     };
 
-    // Initialize physics state on first run
-    if (!physicsRef.current) {
-      physicsRef.current = {
-        value: 0,
-        velocity: 0,
-        target: 0,
-        lastTime: performance.now(),
-      };
-    }
-    physicsRef.current.target = computeCost();
+    physicsRef.current = {
+      value: 0,
+      velocity: 0,
+      target: computeCost(),
+      lastTime: performance.now(),
+    };
 
-    let settled = false;
     let settledInterval: ReturnType<typeof setInterval> | null = null;
 
-    // Spring animation loop
+    // Spring animation loop — writes directly to DOM, no React setState
     const animate = (time: number) => {
       const state = physicsRef.current!;
 
@@ -83,19 +97,17 @@ export function AnimatedCounter({
         // p = p + v*dt
         state.value += state.velocity * dt;
 
-        setDisplayValue(state.value);
+        updateDOM(state.value);
 
         // Check if spring has settled (close to target, low velocity)
         if (Math.abs(displacement) < 1 && Math.abs(state.velocity) < 0.5) {
-          settled = true;
           state.value = state.target;
-          setDisplayValue(state.target);
+          updateDOM(state.target);
           // Switch to slow interval to track drift
           settledInterval = setInterval(() => {
             const newTarget = computeCost();
             if (Math.abs(newTarget - state.value) > 1) {
               // Target drifted enough — restart spring animation
-              settled = false;
               if (settledInterval) clearInterval(settledInterval);
               settledInterval = null;
               state.target = newTarget;
@@ -103,7 +115,7 @@ export function AnimatedCounter({
               animationFrameId = requestAnimationFrame(animate);
             } else {
               state.value = newTarget;
-              setDisplayValue(newTarget);
+              updateDOM(newTarget);
             }
           }, 1000);
           return;
@@ -113,31 +125,23 @@ export function AnimatedCounter({
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    physicsRef.current.lastTime = performance.now();
     animationFrameId = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
       if (settledInterval) clearInterval(settledInterval);
     };
-  }, [mounted, startTime, dailyCostUsd]);
-
-  const formatted = displayValue.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
+  }, [startTime, dailyCostUsd, updateDOM]);
 
   return (
     <span
-      className={`tabular-nums inline-block transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] will-change-[opacity,transform] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-        } ${className}`}
+      ref={spanRef}
+      className={`tabular-nums inline-block transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] will-change-[opacity,transform] opacity-0 translate-y-2 ${className}`}
       style={{
         textShadow: "0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.1)",
       }}
     >
-      {mounted ? formatted : "$0"}
+      $0
     </span>
   );
 }
