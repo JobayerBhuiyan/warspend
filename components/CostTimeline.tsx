@@ -134,7 +134,7 @@ export function CostTimeline({ extraEvents = [] }: { extraEvents?: TimelineEvent
                         />
 
                         <div className="flex flex-col gap-1.5">
-                            <span className="text-xs text-zinc-600 tracking-wider font-mono">
+                            <span className="text-xs text-zinc-500 tracking-wider font-mono">
                                 {event.date}
                             </span>
                             <h3 className="text-[15px] font-medium text-zinc-200 uppercase font-sans leading-snug">

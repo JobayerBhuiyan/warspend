@@ -62,7 +62,7 @@ export function GasPriceTracker({
                         which <strong className="text-zinc-300">20% of the world&apos;s daily oil</strong> moves.
                         AAA reports the fastest weekly increase since Russia&apos;s invasion of Ukraine in 2022.
                     </p>
-                    <p className="mt-3 text-xs text-zinc-600 italic">
+                    <p className="mt-3 text-xs text-zinc-500 italic">
                         Source:{" "}
                         <a href="https://gasprices.aaa.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-zinc-400 transition-colors">
                             AAA Gas Prices

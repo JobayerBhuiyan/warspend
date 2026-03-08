@@ -162,7 +162,7 @@ export default async function Home() {
                   ))}
                 </div>
 
-                <p className="mt-4 text-xs text-zinc-600 italic">
+                <p className="mt-4 text-xs text-zinc-500 italic">
                   Source: NYT DealBook, Mar 4, 2026 (Niko Gallogly)
                 </p>
               </div>
@@ -219,7 +219,7 @@ export default async function Home() {
                   <strong className="text-red-400">exhausted in 4–5 weeks</strong> — creating vulnerabilities for{" "}
                   <strong className="text-zinc-200">NATO, Ukraine, Taiwan, and Japan</strong>, all of which depend on U.S. defense supplies.
                 </p>
-                <p className="mt-3 text-xs text-zinc-600 italic">
+                <p className="mt-3 text-xs text-zinc-500 italic">
                   Source: Military Times, Mar 6, 2026
                 </p>
               </div>
@@ -253,7 +253,7 @@ export default async function Home() {
                 <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">Iranian Military</p>
                 <p className="mt-3 text-3xl font-bold text-red-400 tabular-nums">{data.humanCost.iranianMilitaryKilled.toLocaleString()}+</p>
                 <p className="text-sm text-zinc-500">killed</p>
-                <p className="mt-2 text-xs text-zinc-600 uppercase tracking-wider">{data.humanCost.iranianMilitaryNote}</p>
+                <p className="mt-2 text-xs text-zinc-500 uppercase tracking-wider">{data.humanCost.iranianMilitaryNote}</p>
               </div>
               <div className="rounded-xl glass p-6 text-center" style={{ borderTop: "2px solid rgba(245, 158, 11, 0.4)" }}>
                 <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">Iranian Civilians</p>
@@ -263,7 +263,7 @@ export default async function Home() {
                 <p className="text-sm text-zinc-500">wounded</p>
               </div>
             </div>
-            <p className="mt-4 text-xs text-zinc-600 text-center font-mono">
+            <p className="mt-4 text-xs text-zinc-500 text-center font-mono">
               Sources: DoD/CENTCOM, Hengaw, Iranian Red Crescent, AP, Reuters, Al Jazeera
             </p>
           </section>
@@ -330,7 +330,7 @@ export default async function Home() {
                     ) : (
                       <span className="text-zinc-400">{src.text}</span>
                     )}
-                    {src.desc && <span className="text-zinc-600"> — {src.desc}</span>}
+                    {src.desc && <span className="text-zinc-500"> — {src.desc}</span>}
                   </li>
                 ))}
               </ul>
@@ -355,7 +355,7 @@ export default async function Home() {
               of $1 billion per day. Independent analyses suggest the true cost may be significantly higher.
             </p>
             {data.lastUpdated && (
-              <p className="mt-4 text-xs text-zinc-600">
+              <p className="mt-4 text-xs text-zinc-500">
                 Data updated {new Date(data.lastUpdated).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",
@@ -418,7 +418,7 @@ export default async function Home() {
 
       {/* ─── Footer ──────────────────────────────────── */}
       <footer className="mt-8 border-t border-white/5 py-8">
-        <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 px-4 text-sm text-zinc-600 sm:flex-row">
+        <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 px-4 text-sm text-zinc-500 sm:flex-row">
           <p>War Spend Tracker · Built for transparency</p>
           <div className="flex gap-4">
             <a href="/privacy" className="hover:text-zinc-300 transition-colors">
