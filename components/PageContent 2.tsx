@@ -3,8 +3,13 @@
 import { useRealTimeData } from "@/components/RealTimeProvider";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { CountdownClock } from "@/components/CountdownClock";
+import { GasPriceTracker } from "@/components/GasPriceTracker";
 import { CostRates } from "@/components/CostRates";
+import { AlternativeMetrics } from "@/components/AlternativeMetrics";
+import { CostTimeline } from "@/components/CostTimeline";
+import { LatestNews } from "@/components/LatestNews";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { DonationSection } from "@/components/DonationSection";
 import { AdSense } from "@/components/AdSense";
 import dynamic from "next/dynamic";
 import {
@@ -15,34 +20,9 @@ import {
   Megaphone,
 } from "lucide-react";
 
-const AlternativeMetrics = dynamic(
-  () => import("@/components/AlternativeMetrics").then((mod) => mod.AlternativeMetrics),
-  { loading: () => <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">{[1,2,3,4].map(i => <div key={i} className="rounded-xl glass p-6 h-32 animate-pulse" />)}</div> }
-);
-
-const GasPriceTracker = dynamic(
-  () => import("@/components/GasPriceTracker").then((mod) => mod.GasPriceTracker),
-  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> }
-);
-
 const CostComparisonChart = dynamic(
   () => import("@/components/CostComparisonChart").then((mod) => mod.CostComparisonChart),
   { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> }
-);
-
-const CostTimeline = dynamic(
-  () => import("@/components/CostTimeline").then((mod) => mod.CostTimeline),
-  { loading: () => <div className="h-96 animate-pulse rounded-2xl glass" /> }
-);
-
-const LatestNews = dynamic(
-  () => import("@/components/LatestNews").then((mod) => mod.LatestNews),
-  { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> }
-);
-
-const DonationSection = dynamic(
-  () => import("@/components/DonationSection").then((mod) => mod.DonationSection),
-  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> }
 );
 
 export function PageContent() {
@@ -89,7 +69,7 @@ export function PageContent() {
               href="https://x.com/nancyayoussef/status/2029260834564604070"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline decoration-zinc-600 underline-offset-2 hover:text-zinc-200 transition-[color] duration-200"
+              className="underline decoration-zinc-600 underline-offset-2 hover:text-zinc-200 transition-colors"
             >
               PENTAGON&apos;S PRELIMINARY ESTIMATE
             </a>{" "}
@@ -102,7 +82,7 @@ export function PageContent() {
 
         {/* ─── Main Counter ────────────────────────────── */}
         <ScrollReveal>
-          <section className="relative rounded-3xl bg-[#0d0a0f] p-8 sm:p-12 animate-pulse-glow overflow-hidden text-center ring-1 ring-red-900/30">
+          <section className="relative rounded-2xl glass p-8 sm:p-12 animate-pulse-glow overflow-hidden text-center">
             <div
               className="absolute inset-0 opacity-[0.015] pointer-events-none"
               style={{
@@ -311,7 +291,7 @@ export function PageContent() {
               {data.otherEstimates.map((est) => (
                 <div
                   key={`${est.source}-${est.label}`}
-                  className="flex items-center justify-between px-5 py-3 border-b border-white/[0.03] last:border-0 hover:bg-white/[0.02] transition-[background-color] duration-200"
+                  className="flex items-center justify-between px-5 py-3 border-b border-white/[0.03] last:border-0 hover:bg-white/[0.02] transition-colors"
                 >
                   <span className="text-sm text-zinc-400">
                     {est.source} — {est.label}
@@ -408,7 +388,7 @@ export function PageContent() {
               href="https://act.winwithoutwar.org/sign/supplemental-funding-iran?source=costs-of-war"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-4 rounded-xl glass glass-hover p-5 transition-[background-color,border-color] duration-300"
+              className="group flex items-center gap-4 rounded-xl glass glass-hover p-5 transition-all duration-300"
               style={{ borderLeft: "2px solid rgba(239, 68, 68, 0.4)" }}
             >
               <div className="rounded-lg bg-red-500/10 p-2.5">
@@ -430,7 +410,7 @@ export function PageContent() {
               href="https://www.house.gov/representatives/find-your-representative"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center gap-4 rounded-xl glass glass-hover p-5 transition-[background-color,border-color] duration-300"
+              className="group flex items-center gap-4 rounded-xl glass glass-hover p-5 transition-all duration-300"
               style={{ borderLeft: "2px solid rgba(59, 130, 246, 0.4)" }}
             >
               <div className="rounded-lg bg-blue-500/10 p-2.5">

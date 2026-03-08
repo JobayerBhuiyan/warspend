@@ -56,8 +56,8 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
         return () => clearInterval(interval);
     }, [startTime]);
 
-    const unitStyle = { textShadow: "0 0 20px rgba(239, 68, 68, 0.3)" };
-    const unitClass = "inline-flex items-center justify-center rounded-lg bg-white/[0.04] px-3 py-2 sm:px-4 sm:py-3 font-mono text-2xl sm:text-3xl font-bold text-red-400 tabular-nums ring-1 ring-white/[0.06] min-w-[3rem] sm:min-w-[3.5rem]";
+    const unitStyle = { textShadow: "0 0 15px rgba(239, 68, 68, 0.4), 0 0 30px rgba(239, 68, 68, 0.2)" };
+    const unitClass = "inline-flex items-center justify-center rounded-xl bg-[#1a151b] px-3 py-2 sm:px-4 sm:py-3 font-mono text-2xl sm:text-3xl font-bold text-red-400 tabular-nums ring-1 ring-red-900/20 min-w-[3rem] sm:min-w-[4rem] shadow-inner";
 
     return (
         <div

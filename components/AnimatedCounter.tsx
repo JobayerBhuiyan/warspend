@@ -138,7 +138,7 @@ export function AnimatedCounter({
       ref={spanRef}
       className={`tabular-nums inline-block transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] will-change-[opacity,transform] opacity-0 translate-y-2 ${className}`}
       style={{
-        textShadow: "0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.1)",
+        textShadow: "0 0 20px rgba(239, 68, 68, 0.5), 0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.15)",
       }}
     >
       $0
