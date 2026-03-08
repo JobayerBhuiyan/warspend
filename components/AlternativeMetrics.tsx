@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Home, Brain, Baby, GraduationCap } from "lucide-react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const TOTAL_US_HOMELESS = 653104; // HUD 2023 AHAR estimate
+const TOTAL_US_HOMELESS = 770000; // HUD 2024 AHAR estimate
 
 interface AlternativeMetricsProps {
   startDateIso: string;
@@ -186,14 +186,14 @@ export function AlternativeMetrics({
           )
         </p>
         <p className="text-zinc-600/80 mt-2">
-          * US homeless population baseline: 653,104 (
+          * US homeless population baseline: 770,000 (
           <a
-            href="https://www.huduser.gov/portal/sites/default/files/pdf/2023-AHAR-Part-1.pdf"
+            href="https://www.huduser.gov/portal/sites/default/files/pdf/2024-AHAR-Part-1.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-zinc-400 underline underline-offset-2"
           >
-            HUD 2023 AHAR Report
+            HUD 2024 AHAR Report
           </a>
           )
         </p>
