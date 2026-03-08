@@ -8,9 +8,9 @@ export default function AppleIcon() {
     (
       <div
         style={{
-          fontSize: 110,
-          fontWeight: 800,
-          background: "#ef4444",
+          fontSize: 120,
+          fontWeight: 700,
+          background: "#FF3B30", // Apple Red
           width: "100%",
           height: "100%",
           display: "flex",
@@ -18,8 +18,8 @@ export default function AppleIcon() {
           justifyContent: "center",
           color: "white",
           borderRadius: 40,
-          border: "4px solid #f87171",
-          boxShadow: "inset 0px -8px 16px rgba(153, 27, 27, 0.4)", // Inner shadow for 3D pillowy effect
+          border: "2px solid #FF6B63",
+          boxShadow: "inset 0px -10px 20px rgba(0, 0, 0, 0.2), inset 0px 10px 20px rgba(255, 255, 255, 0.3), 0px 4px 10px rgba(0,0,0,0.5)", // 3D effect matching the image
         }}
       >
         $

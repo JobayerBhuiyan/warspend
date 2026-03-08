@@ -33,6 +33,14 @@ export const COST_RATIO = Math.round(
   EQUIPMENT_COSTS.thaadInterceptor / EQUIPMENT_COSTS.iranianShahed136
 );
 
+/** Alternative uses of funds unit costs (USD) */
+export const ALTERNATIVE_METRICS_COSTS = {
+  homelessHoused: 40_000,
+  mentalHealthTreated: 10_000,
+  childrenFed: 106,
+  studentLoansForgiven: 37_000,
+} as const;
+
 /** Stockpile & depletion stats */
 export const STOCKPILE = {
   totalThaadInterceptors: 600,

@@ -6,6 +6,7 @@ import {
   HUMAN_COST,
   OTHER_ESTIMATES,
   COST_COMPARISON_CHART_DATA,
+  ALTERNATIVE_METRICS_COSTS,
 } from "@/config/trackerData";
 
 export type NewsItem = {
@@ -53,6 +54,12 @@ export type TrackerData = {
   };
   otherEstimates: { source: string; label: string; value: string }[];
   costComparisonChartData: { name: string; value: number; fill: string }[];
+  alternativeMetricsCosts: {
+    homelessHoused: number;
+    mentalHealthTreated: number;
+    childrenFed: number;
+    studentLoansForgiven: number;
+  };
   methodologyText: string;
   methodologyFooter: string;
   lastUpdated?: string;
@@ -148,6 +155,7 @@ function mapApiToTrackerData(data: ApiTrackerData): TrackerData {
       { name: "Patriot PAC-3", value: equipmentCosts.patriotPac3, fill: "#ea580c" },
       { name: "Iranian Shahed-136", value: equipmentCosts.iranianShahed136, fill: "#4b5563" },
     ],
+    alternativeMetricsCosts: ALTERNATIVE_METRICS_COSTS,
     methodologyText:
       data.methodologyText ??
       "Our bottom-up cost model: 13 aircraft types, naval deployments, munitions tracking, and sources. Nancy Youssef (WSJ) — Pentagon preliminary estimate: $1B/day via congressional official. NYT DealBook (Niko Gallogly, Mar 4 2026) — Kavanagh/Defense Priorities interceptor analysis. Penn Wharton Budget Model (Kent Smetters) — $40B–$95B direct, up to $210B economic impact. Center for American Progress — >$5B through Day 4. DoD Comptroller FY2024/25 reimbursable flight-hour rates. Congressional Budget Office (CBO) cost reports. Government Accountability Office (GAO) sustainment reports. Brown University Costs of War Project. DoD/CENTCOM official statements. AP, Reuters, AFP, Al Jazeera reporting.",
@@ -184,6 +192,7 @@ function getFallbackData(): TrackerData {
     humanCost: HUMAN_COST,
     otherEstimates: [...OTHER_ESTIMATES],
     costComparisonChartData: [...COST_COMPARISON_CHART_DATA],
+    alternativeMetricsCosts: ALTERNATIVE_METRICS_COSTS,
     methodologyText:
       "Our bottom-up cost model: 13 aircraft types, naval deployments, munitions tracking, and sources. Nancy Youssef (WSJ) — Pentagon preliminary estimate: $1B/day via congressional official. NYT DealBook (Niko Gallogly, Mar 4 2026) — Kavanagh/Defense Priorities interceptor analysis. Penn Wharton Budget Model (Kent Smetters) — $40B–$95B direct, up to $210B economic impact. Center for American Progress — >$5B through Day 4. DoD Comptroller FY2024/25 reimbursable flight-hour rates. Congressional Budget Office (CBO) cost reports. Government Accountability Office (GAO) sustainment reports. Brown University Costs of War Project. DoD/CENTCOM official statements. AP, Reuters, AFP, Al Jazeera reporting.",
     methodologyFooter:
@@ -210,20 +219,42 @@ export async function getTrackerData(): Promise<TrackerData> {
     return getFallbackData();
   }
 
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/tracker-data`,
-      { next: { revalidate: 900 } }
-    );
+  const MAX_RETRIES = 2;
+  const TIMEOUT_MS = 5000; // 5 second timeout
 
-    if (!res.ok) {
-      throw new Error(`API responded with ${res.status}`);
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tracker-data`,
+        { 
+          next: { revalidate: 60 },
+          signal: controller.signal
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (!res.ok) {
+        throw new Error(`API responded with ${res.status}`);
+      }
+
+      const data: ApiTrackerData = await res.json();
+      return mapApiToTrackerData(data);
+    } catch (error) {
+      console.error(`Attempt ${attempt + 1} failed to fetch tracker data:`, error);
+      
+      // If it's the last attempt, break and return fallback
+      if (attempt === MAX_RETRIES) {
+        console.error("All attempts to fetch tracker data failed, using fallback data.");
+        break;
+      }
+      
+      // Exponential backoff before retry (e.g., 1000ms, 2000ms)
+      await new Promise((resolve) => setTimeout(resolve, Math.pow(2, attempt) * 1000));
     }
-
-    const data: ApiTrackerData = await res.json();
-    return mapApiToTrackerData(data);
-  } catch {
-    // Fall through to fallback on any error
   }
 
   return getFallbackData();

@@ -8,9 +8,9 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 22,
-          fontWeight: 800,
-          background: "#ef4444", // Red-500
+          fontSize: 24,
+          fontWeight: 700,
+          background: "#FF3B30", // Apple red
           width: "100%",
           height: "100%",
           display: "flex",
@@ -18,7 +18,8 @@ export default function Icon() {
           justifyContent: "center",
           color: "white",
           borderRadius: 8,
-          border: "1px solid #f87171", // Lighter red for top-edge bevel effect
+          border: "1px solid #FF6B63", // Lighter top edge effect
+          boxShadow: "inset 0px -2px 4px rgba(0, 0, 0, 0.2), inset 0px 2px 4px rgba(255, 255, 255, 0.3)", // subtle 3D effect
         }}
       >
         $

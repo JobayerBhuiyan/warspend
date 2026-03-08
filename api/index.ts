@@ -1,30 +1,79 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import { trackerData as staticTrackerData } from "./data/trackerData";
 import { fetchLatestTrackerData } from "./services/updater";
 import { fetchLatestNews, getCachedNews } from "./services/newsFetcher";
+import { logger, httpLogger } from "./utils/logger";
 
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
+
+// Set up security headers
+app.use(helmet());
+
+// Apply HTTP logging middleware
+app.use(httpLogger);
+
+// Rate limiting configuration
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    message: { error: "Too many requests, please try again later." }
+});
+
+// Configure CORS
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || 'https://warspend.com']
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            logger.warn({ origin }, 'Blocked by CORS');
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json());
+
+// Apply rate limiter to all routes
+app.use(limiter);
 
 // Use a mutable variable to hold the live data, initializing with static fallback
 let liveTrackerData: Record<string, unknown> = { ...staticTrackerData };
 
 // Update tracker data (Gemini)
 async function updateTrackerData() {
-    const newData = await fetchLatestTrackerData();
-    if (newData) {
-        liveTrackerData = newData;
-        console.log("⬆️ Live tracker data updated successfully in memory.");
-    } else {
-        console.log("⚠️ Keep using existing liveTrackerData.");
+    try {
+        const newData = await fetchLatestTrackerData();
+        if (newData) {
+            liveTrackerData = newData;
+            logger.info("⬆️ Live tracker data updated successfully in memory.");
+        } else {
+            logger.warn("⚠️ Keep using existing liveTrackerData.");
+        }
+    } catch (error) {
+        logger.error({ error }, "Failed to update tracker data");
     }
 }
 
 // Update news data (RSS)
 async function updateNews() {
-    await fetchLatestNews();
-    console.log("📰 News cache refreshed.");
+    try {
+        await fetchLatestNews();
+        logger.info("📰 News cache refreshed.");
+    } catch (error) {
+        logger.error({ error }, "Failed to update news data");
+    }
 }
 
 // Initial fetches on server start
@@ -32,23 +81,19 @@ updateTrackerData();
 updateNews();
 
 // Schedule automated updates
-const TRACKER_UPDATE_MS = 6 * 60 * 60 * 1000; // Every 6 hours
+const TRACKER_UPDATE_MS = 30 * 60 * 1000; // Every 30 minutes
 const NEWS_UPDATE_MS = 30 * 60 * 1000;         // Every 30 minutes
 
 setInterval(updateTrackerData, TRACKER_UPDATE_MS);
 setInterval(updateNews, NEWS_UPDATE_MS);
 
-
-app.use(cors());
-app.use(express.json());
-
 /** Root — friendly landing */
-app.get("/", (_req, res) => {
+app.get("/", (_req: Request, res: Response) => {
     res.json({
         name: "warspend API",
         version: "2.0.0",
         automation: {
-            trackerData: "Gemini Auto-Updates every 6 hours",
+            trackerData: "Gemini Auto-Updates every 30 minutes",
             news: "Google News RSS every 30 minutes",
         },
         endpoints: {
@@ -61,13 +106,17 @@ app.get("/", (_req, res) => {
 });
 
 /** Health check */
-app.get("/health", (_req, res) => {
+app.get("/health", (_req: Request, res: Response) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
 /** Main tracker data endpoint — includes news */
-app.get("/api/tracker-data", (_req, res) => {
+app.get("/api/tracker-data", (_req: Request, res: Response) => {
     const { items: latestNews, lastFetchedAt: newsLastFetched } = getCachedNews();
+    
+    // Set caching headers for improved performance
+    res.set('Cache-Control', 'public, max-age=60'); // 1 minute
+    
     res.json({
         ...liveTrackerData,
         latestNews,
@@ -77,8 +126,12 @@ app.get("/api/tracker-data", (_req, res) => {
 });
 
 /** Latest news endpoint (standalone) */
-app.get("/api/latest-news", (_req, res) => {
+app.get("/api/latest-news", (_req: Request, res: Response) => {
     const { items, lastFetchedAt } = getCachedNews();
+    
+    // Set caching headers
+    res.set('Cache-Control', 'public, max-age=60'); // 1 minute
+    
     res.json({
         items,
         lastFetchedAt,
@@ -87,16 +140,53 @@ app.get("/api/latest-news", (_req, res) => {
 });
 
 /** Force update endpoint */
-app.post("/api/force-update", async (_req, res) => {
-    console.log("⚡ Manual force-update requested");
-    await Promise.all([updateTrackerData(), updateNews()]);
-    res.json({
-        success: true,
-        message: "Data and news update triggered.",
-        updatedAt: new Date().toISOString()
+const forceUpdateLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    limit: 5, // Limit each IP to 5 force updates per hour
+    message: { error: "Too many force update requests, please try again later." }
+});
+
+app.post("/api/force-update", forceUpdateLimiter, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        logger.info("⚡ Manual force-update requested");
+        await Promise.all([updateTrackerData(), updateNews()]);
+        res.json({
+            success: true,
+            message: "Data and news update triggered.",
+            updatedAt: new Date().toISOString()
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Centralized error handling middleware
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    logger.error({ err }, "Unhandled application error");
+    
+    // Check if it's a CORS error
+    if (err.message === 'Not allowed by CORS') {
+        res.status(403).json({ error: "Forbidden: CORS policy violation" });
+        return;
+    }
+    
+    res.status(500).json({
+        error: "Internal Server Error",
+        message: process.env.NODE_ENV === "development" ? err.message : "An unexpected error occurred"
     });
 });
 
+// Handle uncaught exceptions and rejections
+process.on('uncaughtException', (err) => {
+    logger.fatal({ err }, 'Uncaught Exception');
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    logger.fatal({ reason, promise }, 'Unhandled Rejection');
+    process.exit(1);
+});
+
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`🚀 warspend API running on port ${PORT}`);
+    logger.info(`🚀 warspend API running on port ${PORT}`);
 });
