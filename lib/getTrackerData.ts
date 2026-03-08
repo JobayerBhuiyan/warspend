@@ -234,7 +234,10 @@ export async function getTrackerData(): Promise<TrackerData> {
       clearTimeout(timeoutId);
 
       if (!res.ok) {
-        throw new Error(`API responded with ${res.status}`);
+        if (attempt === MAX_RETRIES) {
+          console.warn(`[getTrackerData] API responded with ${res.status}. Falling back to static data.`);
+        }
+        throw new Error(`API error: ${res.status}`);
       }
 
       const data: ApiTrackerData = await res.json();
