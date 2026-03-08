@@ -53,14 +53,6 @@ export function AnimatedCounter({
     if (mountedRef.current) return;
     mountedRef.current = true;
 
-    const el = spanRef.current;
-    if (el) {
-      requestAnimationFrame(() => {
-        el.classList.remove("opacity-0", "translate-y-2");
-        el.classList.add("opacity-100", "translate-y-0");
-      });
-    }
-
     const stiffness = 30;
     const damping = 20;
     let animationFrameId: number;
@@ -143,9 +135,10 @@ export function AnimatedCounter({
     <span
       ref={spanRef}
       suppressHydrationWarning
-      className={`tabular-nums inline-block transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] will-change-[opacity,transform] opacity-0 translate-y-2 ${className}`}
+      className={`tabular-nums inline-block ${className}`}
       style={{
-        textShadow: "0 0 20px rgba(239, 68, 68, 0.5), 0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.15)",
+        textShadow:
+          "0 0 20px rgba(239, 68, 68, 0.5), 0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.15)",
       }}
     >
       $0

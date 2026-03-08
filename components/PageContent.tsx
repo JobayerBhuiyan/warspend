@@ -16,33 +16,49 @@ import {
 } from "lucide-react";
 
 const AlternativeMetrics = dynamic(
-  () => import("@/components/AlternativeMetrics").then((mod) => mod.AlternativeMetrics),
-  { loading: () => <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">{[1,2,3,4].map(i => <div key={i} className="rounded-xl glass p-6 h-32 animate-pulse" />)}</div> }
+  () =>
+    import("@/components/AlternativeMetrics").then(
+      (mod) => mod.AlternativeMetrics,
+    ),
+  {
+    loading: () => (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 w-full">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="rounded-xl glass p-6 h-32 animate-pulse" />
+        ))}
+      </div>
+    ),
+  },
 );
 
 const GasPriceTracker = dynamic(
-  () => import("@/components/GasPriceTracker").then((mod) => mod.GasPriceTracker),
-  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> }
+  () =>
+    import("@/components/GasPriceTracker").then((mod) => mod.GasPriceTracker),
+  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> },
 );
 
 const CostComparisonChart = dynamic(
-  () => import("@/components/CostComparisonChart").then((mod) => mod.CostComparisonChart),
-  { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> }
+  () =>
+    import("@/components/CostComparisonChart").then(
+      (mod) => mod.CostComparisonChart,
+    ),
+  { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> },
 );
 
 const CostTimeline = dynamic(
   () => import("@/components/CostTimeline").then((mod) => mod.CostTimeline),
-  { loading: () => <div className="h-96 animate-pulse rounded-2xl glass" /> }
+  { loading: () => <div className="h-96 animate-pulse rounded-2xl glass" /> },
 );
 
 const LatestNews = dynamic(
   () => import("@/components/LatestNews").then((mod) => mod.LatestNews),
-  { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> }
+  { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> },
 );
 
 const DonationSection = dynamic(
-  () => import("@/components/DonationSection").then((mod) => mod.DonationSection),
-  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> }
+  () =>
+    import("@/components/DonationSection").then((mod) => mod.DonationSection),
+  { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> },
 );
 
 export function PageContent() {
@@ -99,39 +115,38 @@ export function PageContent() {
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-12">
+        {/* ─── Main Counter (LCP element - no ScrollReveal for faster paint) ─── */}
+        <section className="relative rounded-3xl bg-[#0d0a0f] p-8 sm:p-12 animate-pulse-glow overflow-hidden text-center ring-1 ring-red-900/30">
+          <div
+            className="absolute inset-0 opacity-[0.015] pointer-events-none"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)",
+            }}
+          />
 
-        {/* ─── Main Counter ────────────────────────────── */}
-        <ScrollReveal>
-          <section className="relative rounded-3xl bg-[#0d0a0f] p-8 sm:p-12 animate-pulse-glow overflow-hidden text-center ring-1 ring-red-900/30">
-            <div
-              className="absolute inset-0 opacity-[0.015] pointer-events-none"
-              style={{
-                backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)",
-              }}
-            />
-
-            <div className="relative">
-              <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">
-                Est. U.S. Cost Since Strikes Began
-              </p>
-              <div className="mt-4">
-                <AnimatedCounter
-                  startDateIso={data.startDateIso}
-                  dailyCostUsd={data.trackerConfig.dailyCostUsd}
-                  className="text-4xl font-bold text-[#ff5a5a] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight"
-                />
-              </div>
-              <p className="mt-4 text-sm text-zinc-500 font-mono">
-                ${(data.trackerConfig.dailyCostUsd).toLocaleString()} / day · Pentagon estimate via congressional official
-              </p>
-
-              {/* Countdown Clock */}
-              <div className="mt-6">
-                <CountdownClock startDateIso={data.startDateIso} />
-              </div>
+          <div className="relative">
+            <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">
+              Est. U.S. Cost Since Strikes Began
+            </p>
+            <div className="mt-4">
+              <AnimatedCounter
+                startDateIso={data.startDateIso}
+                dailyCostUsd={data.trackerConfig.dailyCostUsd}
+                className="text-4xl font-bold text-[#ff5a5a] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight"
+              />
             </div>
-          </section>
-        </ScrollReveal>
+            <p className="mt-4 text-sm text-zinc-500 font-mono">
+              ${data.trackerConfig.dailyCostUsd.toLocaleString()} / day ·
+              Pentagon estimate via congressional official
+            </p>
+
+            {/* Countdown Clock */}
+            <div className="mt-6">
+              <CountdownClock startDateIso={data.startDateIso} />
+            </div>
+          </div>
+        </section>
 
         {/* ─── Cost Rates & Share ──────────────────────── */}
         <ScrollReveal delay={0.1}>
@@ -173,23 +188,50 @@ export function PageContent() {
               <div className="p-5">
                 <p className="text-sm text-zinc-400 leading-relaxed">
                   Jennifer Kavanagh of Defense Priorities estimates the U.S.{" "}
-                  <strong className="text-zinc-200">&quot;easily&quot; spent more than $10 billion on air-defense systems in the first 48 hours</strong>.
-                  Iran launched 2,000+ drones and 500+ ballistic missiles (CSIS).
-                  CSIS separately estimates interceptor costs at{" "}
-                  <strong className="text-zinc-200">$1.2B–$3.7B</strong> for the first 100 hours.
+                  <strong className="text-zinc-200">
+                    &quot;easily&quot; spent more than $10 billion on
+                    air-defense systems in the first 48 hours
+                  </strong>
+                  . Iran launched 2,000+ drones and 500+ ballistic missiles
+                  (CSIS). CSIS separately estimates interceptor costs at{" "}
+                  <strong className="text-zinc-200">$1.2B–$3.7B</strong> for the
+                  first 100 hours.
                 </p>
 
                 {/* Equipment cost table */}
                 <div className="mt-5 space-y-0">
                   {[
-                    { label: "THAAD interceptor", value: `$${data.equipmentCosts.thaadInterceptor.toLocaleString()} each`, color: "text-red-400" },
-                    { label: "Patriot PAC-3", value: `$${data.equipmentCosts.patriotPac3.toLocaleString()} each`, color: "text-red-400" },
-                    { label: "Iranian Shahed-136 drone", value: `$${data.equipmentCosts.iranianShahed136.toLocaleString()} each`, color: "text-red-400" },
-                    { label: "Cost ratio (interceptor vs. drone)", value: `${data.costRatio} : 1`, color: "text-amber-400" },
+                    {
+                      label: "THAAD interceptor",
+                      value: `$${data.equipmentCosts.thaadInterceptor.toLocaleString()} each`,
+                      color: "text-red-400",
+                    },
+                    {
+                      label: "Patriot PAC-3",
+                      value: `$${data.equipmentCosts.patriotPac3.toLocaleString()} each`,
+                      color: "text-red-400",
+                    },
+                    {
+                      label: "Iranian Shahed-136 drone",
+                      value: `$${data.equipmentCosts.iranianShahed136.toLocaleString()} each`,
+                      color: "text-red-400",
+                    },
+                    {
+                      label: "Cost ratio (interceptor vs. drone)",
+                      value: `${data.costRatio} : 1`,
+                      color: "text-amber-400",
+                    },
                   ].map((row) => (
-                    <div key={row.label} className="flex items-center justify-between py-2.5 border-b border-white/[0.03] last:border-0">
+                    <div
+                      key={row.label}
+                      className="flex items-center justify-between py-2.5 border-b border-white/[0.03] last:border-0"
+                    >
                       <span className="text-sm text-zinc-400">{row.label}</span>
-                      <span className={`text-sm font-mono font-medium tabular-nums ${row.color}`}>{row.value}</span>
+                      <span
+                        className={`text-sm font-mono font-medium tabular-nums ${row.color}`}
+                      >
+                        {row.value}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -227,29 +269,67 @@ export function PageContent() {
               </div>
               <div className="p-5 space-y-0">
                 {[
-                  { label: "THAAD interceptors (Dec 2025)", value: String(data.stockpile.totalThaadInterceptors), color: "text-zinc-200" },
-                  { label: `Used in June 2025 (12-day war)`, value: `${data.stockpile.usedInJune2025War} THAAD`, color: "text-red-400" },
-                  { label: "THAAD production rate", value: "96/yr → 400/yr (ramping)", color: "text-red-400" },
-                  { label: "PAC-3 production rate", value: "~600/yr → 2,000/yr (ramping)", color: "text-red-400" },
-                  { label: "Full depletion at current usage", value: "4–5 weeks", color: "text-amber-400" },
+                  {
+                    label: "THAAD interceptors (Dec 2025)",
+                    value: String(data.stockpile.totalThaadInterceptors),
+                    color: "text-zinc-200",
+                  },
+                  {
+                    label: `Used in June 2025 (12-day war)`,
+                    value: `${data.stockpile.usedInJune2025War} THAAD`,
+                    color: "text-red-400",
+                  },
+                  {
+                    label: "THAAD production rate",
+                    value: "96/yr → 400/yr (ramping)",
+                    color: "text-red-400",
+                  },
+                  {
+                    label: "PAC-3 production rate",
+                    value: "~600/yr → 2,000/yr (ramping)",
+                    color: "text-red-400",
+                  },
+                  {
+                    label: "Full depletion at current usage",
+                    value: "4–5 weeks",
+                    color: "text-amber-400",
+                  },
                 ].map((row) => (
-                  <div key={row.label} className="flex items-center justify-between py-2.5 border-b border-white/[0.03] last:border-0">
+                  <div
+                    key={row.label}
+                    className="flex items-center justify-between py-2.5 border-b border-white/[0.03] last:border-0"
+                  >
                     <span className="text-sm text-zinc-400">{row.label}</span>
-                    <span className={`text-sm font-mono font-medium tabular-nums ${row.color}`}>{row.value}</span>
+                    <span
+                      className={`text-sm font-mono font-medium tabular-nums ${row.color}`}
+                    >
+                      {row.value}
+                    </span>
                   </div>
                 ))}
               </div>
               <div className="px-5 pb-5">
                 <p className="text-sm text-zinc-400 leading-relaxed">
                   In June 2025&apos;s 12-day war, the U.S. expended{" "}
-                  <strong className="text-zinc-200">up to 30% of its THAAD stockpile</strong>.
-                  Production cannot keep pace: even at quadrupled rates, replacing {data.stockpile.usedInJune2025War} THAAD interceptors
-                  takes <strong className="text-zinc-200">nearly 5 months</strong>.
+                  <strong className="text-zinc-200">
+                    up to 30% of its THAAD stockpile
+                  </strong>
+                  . Production cannot keep pace: even at quadrupled rates,
+                  replacing {data.stockpile.usedInJune2025War} THAAD
+                  interceptors takes{" "}
+                  <strong className="text-zinc-200">nearly 5 months</strong>.
                 </p>
                 <p className="mt-3 text-sm text-zinc-400 leading-relaxed">
-                  At sustained conflict consumption, the entire U.S. interceptor stockpile could be{" "}
-                  <strong className="text-red-400">exhausted in 4–5 weeks</strong> — creating vulnerabilities for{" "}
-                  <strong className="text-zinc-200">NATO, Ukraine, Taiwan, and Japan</strong>, all of which depend on U.S. defense supplies.
+                  At sustained conflict consumption, the entire U.S. interceptor
+                  stockpile could be{" "}
+                  <strong className="text-red-400">
+                    exhausted in 4–5 weeks
+                  </strong>{" "}
+                  — creating vulnerabilities for{" "}
+                  <strong className="text-zinc-200">
+                    NATO, Ukraine, Taiwan, and Japan
+                  </strong>
+                  , all of which depend on U.S. defense supplies.
                 </p>
                 <p className="mt-3 text-xs text-zinc-500 italic">
                   Source: Military Times, Mar 6, 2026
@@ -274,29 +354,57 @@ export function PageContent() {
               The Human Cost
             </h2>
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl glass p-6 text-center" style={{ borderTop: "2px solid rgba(59, 130, 246, 0.4)" }}>
-                <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">U.S. Service Members</p>
-                <p className="mt-3 text-3xl font-bold text-blue-400 tabular-nums">{data.humanCost.usKilled}</p>
+              <div
+                className="rounded-xl glass p-6 text-center"
+                style={{ borderTop: "2px solid rgba(59, 130, 246, 0.4)" }}
+              >
+                <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">
+                  U.S. Service Members
+                </p>
+                <p className="mt-3 text-3xl font-bold text-blue-400 tabular-nums">
+                  {data.humanCost.usKilled}
+                </p>
                 <p className="text-sm text-zinc-500">killed</p>
-                <p className="mt-2 text-2xl font-bold text-blue-400 tabular-nums">{data.humanCost.usWounded}</p>
+                <p className="mt-2 text-2xl font-bold text-blue-400 tabular-nums">
+                  {data.humanCost.usWounded}
+                </p>
                 <p className="text-sm text-zinc-500">wounded</p>
               </div>
-              <div className="rounded-xl glass p-6 text-center" style={{ borderTop: "2px solid rgba(239, 68, 68, 0.4)" }}>
-                <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">Iranian Military</p>
-                <p className="mt-3 text-3xl font-bold text-red-400 tabular-nums">{data.humanCost.iranianMilitaryKilled.toLocaleString()}+</p>
+              <div
+                className="rounded-xl glass p-6 text-center"
+                style={{ borderTop: "2px solid rgba(239, 68, 68, 0.4)" }}
+              >
+                <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">
+                  Iranian Military
+                </p>
+                <p className="mt-3 text-3xl font-bold text-red-400 tabular-nums">
+                  {data.humanCost.iranianMilitaryKilled.toLocaleString()}+
+                </p>
                 <p className="text-sm text-zinc-500">killed</p>
-                <p className="mt-2 text-xs text-zinc-500 uppercase tracking-wider">{data.humanCost.iranianMilitaryNote}</p>
+                <p className="mt-2 text-xs text-zinc-500 uppercase tracking-wider">
+                  {data.humanCost.iranianMilitaryNote}
+                </p>
               </div>
-              <div className="rounded-xl glass p-6 text-center" style={{ borderTop: "2px solid rgba(245, 158, 11, 0.4)" }}>
-                <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">Iranian Civilians</p>
-                <p className="mt-3 text-3xl font-bold text-amber-400 tabular-nums">{data.humanCost.iranianCiviliansKilled.toLocaleString()}+</p>
+              <div
+                className="rounded-xl glass p-6 text-center"
+                style={{ borderTop: "2px solid rgba(245, 158, 11, 0.4)" }}
+              >
+                <p className="text-xs font-mono tracking-[0.2em] text-zinc-500 uppercase">
+                  Iranian Civilians
+                </p>
+                <p className="mt-3 text-3xl font-bold text-amber-400 tabular-nums">
+                  {data.humanCost.iranianCiviliansKilled.toLocaleString()}+
+                </p>
                 <p className="text-sm text-zinc-500">killed</p>
-                <p className="mt-2 text-2xl font-bold text-amber-400 tabular-nums">{data.humanCost.iranianCiviliansWounded.toLocaleString()}+</p>
+                <p className="mt-2 text-2xl font-bold text-amber-400 tabular-nums">
+                  {data.humanCost.iranianCiviliansWounded.toLocaleString()}+
+                </p>
                 <p className="text-sm text-zinc-500">wounded</p>
               </div>
             </div>
             <p className="mt-4 text-xs text-zinc-500 text-center font-mono">
-              Sources: DoD/CENTCOM, Hengaw, Iranian Red Crescent, AP, Reuters, Al Jazeera
+              Sources: DoD/CENTCOM, Hengaw, Iranian Red Crescent, AP, Reuters,
+              Al Jazeera
             </p>
           </section>
         </ScrollReveal>
@@ -339,30 +447,89 @@ export function PageContent() {
             <div className="rounded-xl glass p-5">
               <ul className="space-y-2 text-sm text-zinc-500">
                 {[
-                  { text: "Nancy Youssef (WSJ)", href: "https://x.com/nancyayoussef/status/2029260834564604070", desc: "Pentagon preliminary estimate: $1B/day via congressional official" },
-                  { text: "NYT DealBook (Niko Gallogly, Mar 4 2026)", href: "https://www.nytimes.com/2026/03/04/business/dealbook/iran-war-cost.html", desc: "Kavanagh/Defense Priorities interceptor analysis" },
-                  { text: "Military Times (Mar 6, 2026)", href: null, desc: "Interceptor stockpile data, production rates, depletion timeline" },
-                  { text: "CSIS (Cancian & Park, Mar 5 2026)", href: "https://www.csis.org/", desc: "$3.7B first 100 hours; munitions, aircraft losses, interceptor breakdown" },
-                  { text: "Penn Wharton Budget Model (Kent Smetters)", href: "https://budgetmodel.wharton.upenn.edu/", desc: "$40B–$95B direct, up to $210B economic impact" },
-                  { text: "Center for American Progress", href: "https://www.americanprogress.org/", desc: ">$5B through Day 4" },
-                  { text: "DoD Comptroller FY2024/25", href: "https://comptroller.defense.gov/", desc: "reimbursable flight-hour rates" },
-                  { text: "Congressional Budget Office (CBO)", href: "https://www.cbo.gov/", desc: "cost reports" },
-                  { text: "Government Accountability Office (GAO)", href: "https://www.gao.gov/", desc: "sustainment reports" },
-                  { text: "Brown University Costs of War Project", href: "https://watson.brown.edu/costsofwar/", desc: null },
-                  { text: "AAA Gas Prices", href: "https://gasprices.aaa.com/", desc: "National average gas price data; +$0.27/week post-conflict" },
-                  { text: "DoD/CENTCOM official statements", href: null, desc: null },
-                  { text: "AP, Reuters, AFP, Al Jazeera reporting", href: null, desc: null },
+                  {
+                    text: "Nancy Youssef (WSJ)",
+                    href: "https://x.com/nancyayoussef/status/2029260834564604070",
+                    desc: "Pentagon preliminary estimate: $1B/day via congressional official",
+                  },
+                  {
+                    text: "NYT DealBook (Niko Gallogly, Mar 4 2026)",
+                    href: "https://www.nytimes.com/2026/03/04/business/dealbook/iran-war-cost.html",
+                    desc: "Kavanagh/Defense Priorities interceptor analysis",
+                  },
+                  {
+                    text: "Military Times (Mar 6, 2026)",
+                    href: null,
+                    desc: "Interceptor stockpile data, production rates, depletion timeline",
+                  },
+                  {
+                    text: "CSIS (Cancian & Park, Mar 5 2026)",
+                    href: "https://www.csis.org/",
+                    desc: "$3.7B first 100 hours; munitions, aircraft losses, interceptor breakdown",
+                  },
+                  {
+                    text: "Penn Wharton Budget Model (Kent Smetters)",
+                    href: "https://budgetmodel.wharton.upenn.edu/",
+                    desc: "$40B–$95B direct, up to $210B economic impact",
+                  },
+                  {
+                    text: "Center for American Progress",
+                    href: "https://www.americanprogress.org/",
+                    desc: ">$5B through Day 4",
+                  },
+                  {
+                    text: "DoD Comptroller FY2024/25",
+                    href: "https://comptroller.defense.gov/",
+                    desc: "reimbursable flight-hour rates",
+                  },
+                  {
+                    text: "Congressional Budget Office (CBO)",
+                    href: "https://www.cbo.gov/",
+                    desc: "cost reports",
+                  },
+                  {
+                    text: "Government Accountability Office (GAO)",
+                    href: "https://www.gao.gov/",
+                    desc: "sustainment reports",
+                  },
+                  {
+                    text: "Brown University Costs of War Project",
+                    href: "https://watson.brown.edu/costsofwar/",
+                    desc: null,
+                  },
+                  {
+                    text: "AAA Gas Prices",
+                    href: "https://gasprices.aaa.com/",
+                    desc: "National average gas price data; +$0.27/week post-conflict",
+                  },
+                  {
+                    text: "DoD/CENTCOM official statements",
+                    href: null,
+                    desc: null,
+                  },
+                  {
+                    text: "AP, Reuters, AFP, Al Jazeera reporting",
+                    href: null,
+                    desc: null,
+                  },
                 ].map((src) => (
                   <li key={src.text} className="leading-relaxed">
                     <span className="text-zinc-600">· </span>
                     {src.href ? (
-                      <a href={src.href} target="_blank" rel="noopener noreferrer" className="text-zinc-300 underline decoration-zinc-700 underline-offset-2 hover:text-zinc-100 transition-colors">
+                      <a
+                        href={src.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-zinc-300 underline decoration-zinc-700 underline-offset-2 hover:text-zinc-100 transition-colors"
+                      >
                         {src.text}
                       </a>
                     ) : (
                       <span className="text-zinc-400">{src.text}</span>
                     )}
-                    {src.desc && <span className="text-zinc-500"> — {src.desc}</span>}
+                    {src.desc && (
+                      <span className="text-zinc-500"> — {src.desc}</span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -374,8 +541,9 @@ export function PageContent() {
         <ScrollReveal delay={0.1}>
           <div className="text-center">
             <p className="text-sm text-zinc-500 leading-relaxed max-w-2xl mx-auto">
-              This tracker exists because the public deserves real-time transparency about the cost of military
-              operations — not just after-the-fact reports years later. The counter uses the{" "}
+              This tracker exists because the public deserves real-time
+              transparency about the cost of military operations — not just
+              after-the-fact reports years later. The counter uses the{" "}
               <a
                 href="https://x.com/nancyayoussef/status/2029260834564604070"
                 target="_blank"
@@ -384,11 +552,13 @@ export function PageContent() {
               >
                 Pentagon&apos;s own preliminary estimate
               </a>{" "}
-              of $1 billion per day. Independent analyses suggest the true cost may be significantly higher.
+              of $1 billion per day. Independent analyses suggest the true cost
+              may be significantly higher.
             </p>
             {data.lastUpdated && (
               <p className="mt-4 text-xs text-zinc-500">
-                Data updated {new Date(data.lastUpdated).toLocaleDateString("en-US", {
+                Data updated{" "}
+                {new Date(data.lastUpdated).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "short",
                   day: "numeric",
@@ -419,7 +589,8 @@ export function PageContent() {
                   Sign the Petition
                 </p>
                 <p className="mt-0.5 text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                  Demand Congress block supplemental funding for unauthorized military action in Iran
+                  Demand Congress block supplemental funding for unauthorized
+                  military action in Iran
                 </p>
               </div>
               <ExternalLink className="h-4 w-4 text-zinc-600 group-hover:text-red-400 transition-colors" />
@@ -441,7 +612,8 @@ export function PageContent() {
                   Call Your Representative
                 </p>
                 <p className="mt-0.5 text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                  Demand Congress invoke the War Powers Resolution to end unauthorized military action in Iran
+                  Demand Congress invoke the War Powers Resolution to end
+                  unauthorized military action in Iran
                 </p>
               </div>
               <ExternalLink className="h-4 w-4 text-zinc-600 group-hover:text-blue-400 transition-colors" />
@@ -455,7 +627,10 @@ export function PageContent() {
         <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 px-4 text-sm text-zinc-500 sm:flex-row">
           <p>War Spend Tracker · Built for transparency</p>
           <div className="flex gap-4">
-            <a href="/privacy" className="hover:text-zinc-300 transition-colors">
+            <a
+              href="/privacy"
+              className="hover:text-zinc-300 transition-colors"
+            >
               Privacy Policy
             </a>
           </div>

@@ -16,8 +16,7 @@ const geistMono = Geist_Mono({
   preload: true,
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://warspend.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://warspend.com";
 
 export const metadata: Metadata = {
   title: "Iran War Spend Tracker — Live Estimate of U.S. Taxpayer Spending",
@@ -49,8 +48,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* DNS prefetch and preconnect for faster API connections */}
+        {apiUrl && (
+          <>
+            <link rel="dns-prefetch" href={apiUrl} />
+            <link rel="preconnect" href={apiUrl} crossOrigin="anonymous" />
+          </>
+        )}
+        {/* Preconnect to Google Fonts (used by next/font) */}
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        {/* Preconnect to AdSense - loaded lazily but connection can start early */}
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
