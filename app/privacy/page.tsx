@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { AdSense } from "@/components/AdSense";
 
 export const metadata = {
     title: "Privacy Policy | Iran War Spend Tracker",
@@ -9,6 +10,7 @@ export const metadata = {
 export default function PrivacyPolicy() {
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+            <AdSense />
             <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
                 <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
                     <div className="mb-4">

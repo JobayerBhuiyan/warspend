@@ -6,6 +6,7 @@ import { StatCard } from "@/components/StatCard";
 import { CostRates } from "@/components/CostRates";
 import { CostTimeline } from "@/components/CostTimeline";
 import { LatestNews } from "@/components/LatestNews";
+import { AdSense } from "@/components/AdSense";
 import {
   Users,
   Swords,
@@ -21,6 +22,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <AdSense />
       {/* Hero */}
       <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
