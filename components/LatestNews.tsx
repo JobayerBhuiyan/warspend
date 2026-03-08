@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Newspaper, ExternalLink } from "lucide-react";
 
 interface NewsItem {
@@ -42,15 +41,12 @@ export function LatestNews({ items }: { items: NewsItem[] }) {
             </div>
             <div className="space-y-2">
                 {items.slice(0, 10).map((item, i) => (
-                    <motion.a
+                    <a
                         key={item.link}
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-start justify-between gap-3 rounded-xl glass glass-hover px-4 py-3.5 transition-all duration-300"
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: i * 0.03 }}
                     >
                         <div className="flex-1 min-w-0">
                             <p className="font-medium text-zinc-200 group-hover:text-red-400 transition-colors line-clamp-2">
@@ -61,11 +57,11 @@ export function LatestNews({ items }: { items: NewsItem[] }) {
                                     {item.source}
                                 </span>
                                 <span className="text-zinc-600">·</span>
-                                <span>{timeAgo(item.pubDate)}</span>
+                                <span suppressHydrationWarning>{timeAgo(item.pubDate)}</span>
                             </div>
                         </div>
                         <ExternalLink className="h-4 w-4 flex-shrink-0 mt-1 text-zinc-600 group-hover:text-red-400 transition-colors" />
-                    </motion.a>
+                    </a>
                 ))}
             </div>
         </section>

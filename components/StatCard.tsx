@@ -1,7 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 interface StatCardProps {
   title: string;
   value: string | number;
@@ -22,12 +18,9 @@ export function StatCard({
   accentColor = "rgba(239, 68, 68, 0.4)",
 }: StatCardProps) {
   return (
-    <motion.div
+    <div
       className={`group relative rounded-xl glass p-5 transition-all duration-300 hover:scale-[1.02] ${className}`}
       style={{ borderLeft: `2px solid ${accentColor}` }}
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
     >
       <div className="flex items-start justify-between gap-2">
         <div>
@@ -49,6 +42,6 @@ export function StatCard({
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

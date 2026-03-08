@@ -2,8 +2,12 @@ import { getTrackerData } from "@/lib/getTrackerData";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { CountdownClock } from "@/components/CountdownClock";
 import { GasPriceTracker } from "@/components/GasPriceTracker";
-import { CostComparisonChart } from "@/components/CostComparisonChart";
 import { StatCard } from "@/components/StatCard";
+import dynamic from "next/dynamic";
+const CostComparisonChart = dynamic(
+  () => import("@/components/CostComparisonChart").then((mod) => mod.CostComparisonChart),
+  { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> }
+);
 import { CostRates } from "@/components/CostRates";
 import { CostTimeline } from "@/components/CostTimeline";
 import { LatestNews } from "@/components/LatestNews";

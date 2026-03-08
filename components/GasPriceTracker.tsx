@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { Fuel } from "lucide-react";
 
 interface GasPriceTrackerProps {
@@ -27,11 +24,7 @@ export function GasPriceTracker({
     ];
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
+        <div>
             <h2 className="text-xs font-mono font-semibold tracking-[0.2em] text-zinc-500 uppercase mb-5">
                 Pain at the Pump
             </h2>
@@ -74,6 +67,6 @@ export function GasPriceTracker({
                     </p>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 }

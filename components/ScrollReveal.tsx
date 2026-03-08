@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 interface ScrollRevealProps {
     children: React.ReactNode;
@@ -17,30 +16,36 @@ export function ScrollReveal({
     direction = "up",
 }: ScrollRevealProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const isInView = useInView(ref, { once: true, margin: "-80px" });
+    const [isVisible, setIsVisible] = useState(false);
 
-    const directionMap = {
-        up: { y: 40, x: 0 },
-        down: { y: -40, x: 0 },
-        left: { x: 40, y: 0 },
-        right: { x: -40, y: 0 },
-    };
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: "0px 0px -80px 0px" }
+        );
 
-    const { x, y } = directionMap[direction];
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
+    const revealClass = isVisible ? "scroll-reveal-visible" : "scroll-reveal";
+    const dirClass = `reveal-${direction}`;
 
     return (
-        <motion.div
+        <div
             ref={ref}
-            className={className}
-            initial={{ opacity: 0, x, y }}
-            animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x, y }}
-            transition={{
-                duration: 0.6,
-                delay,
-                ease: [0.21, 0.47, 0.32, 0.98],
-            }}
+            className={`${className} ${revealClass} ${dirClass}`}
+            style={{ transitionDelay: `${delay}s` }}
         >
             {children}
-        </motion.div>
+        </div>
     );
 }
