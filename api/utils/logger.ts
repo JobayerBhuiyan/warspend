@@ -18,6 +18,7 @@ export const logger = pino({
 
 export const httpLogger = pinoHttp({
   logger,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   customProps: (_req, _res) => ({
     context: "http",
   }),

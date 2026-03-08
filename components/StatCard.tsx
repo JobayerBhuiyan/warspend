@@ -4,7 +4,6 @@ interface StatCardProps {
   subtitle?: string;
   icon?: React.ReactNode;
   className?: string;
-  delay?: number;
   accentColor?: string;
 }
 
@@ -14,7 +13,6 @@ export function StatCard({
   subtitle,
   icon,
   className = "",
-  delay: _delay = 0,
   accentColor = "rgba(239, 68, 68, 0.4)",
 }: StatCardProps) {
   return (
