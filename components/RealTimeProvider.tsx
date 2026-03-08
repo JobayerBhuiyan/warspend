@@ -121,6 +121,11 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
   }, []);
 
   useEffect(() => {
+    // Fetch immediately on mount so client picks up fresh API data
+    // even if the server-side build used fallback values
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchLatest();
+
     // Start polling
     intervalRef.current = setInterval(fetchLatest, POLL_INTERVAL_MS);
 
@@ -134,6 +139,7 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
       } else {
         // Fetch immediately on return, then resume interval
         fetchLatest();
+        if (intervalRef.current) clearInterval(intervalRef.current);
         intervalRef.current = setInterval(fetchLatest, POLL_INTERVAL_MS);
       }
     };

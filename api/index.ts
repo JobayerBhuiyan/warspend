@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import { trackerData as staticTrackerData } from "./data/trackerData";
 import { fetchLatestTrackerData } from "./services/updater";
 import { fetchLatestNews, getCachedNews } from "./services/newsFetcher";
+import { fetchGasPrices } from "./services/gasPriceFetcher";
 import { logger, httpLogger } from "./utils/logger";
 
 const app = express();
@@ -76,16 +77,40 @@ async function updateNews() {
     }
 }
 
+// Update gas prices (AAA + Brent crude)
+async function updateGasPrices() {
+    try {
+        const prices = await fetchGasPrices();
+        if (prices && liveTrackerData.gasPrices) {
+            liveTrackerData = {
+                ...liveTrackerData,
+                gasPrices: {
+                    preConflictPrice: prices.preConflictPrice,
+                    currentPrice: prices.currentPrice,
+                    brentCrudePrice: prices.brentCrudePrice,
+                    brentCrudeChange: prices.brentCrudeChange,
+                },
+            };
+            logger.info({ currentPrice: prices.currentPrice }, "⛽ Gas prices merged into live data.");
+        }
+    } catch (error) {
+        logger.error({ error }, "Failed to update gas prices");
+    }
+}
+
 // Initial fetches on server start
 updateTrackerData();
 updateNews();
+updateGasPrices();
 
 // Schedule automated updates
 const TRACKER_UPDATE_MS = 30 * 60 * 1000; // Every 30 minutes
 const NEWS_UPDATE_MS = 30 * 60 * 1000;         // Every 30 minutes
+const GAS_PRICE_UPDATE_MS = 15 * 60 * 1000;    // Every 15 minutes
 
 setInterval(updateTrackerData, TRACKER_UPDATE_MS);
 setInterval(updateNews, NEWS_UPDATE_MS);
+setInterval(updateGasPrices, GAS_PRICE_UPDATE_MS);
 
 /** Root — friendly landing */
 app.get("/", (_req: Request, res: Response) => {
@@ -95,6 +120,7 @@ app.get("/", (_req: Request, res: Response) => {
         automation: {
             trackerData: "Gemini Auto-Updates every 30 minutes",
             news: "Google News RSS every 30 minutes",
+            gasPrices: "AAA + Brent crude every 15 minutes",
         },
         endpoints: {
             health: "/health",
@@ -149,7 +175,7 @@ const forceUpdateLimiter = rateLimit({
 app.post("/api/force-update", forceUpdateLimiter, async (req: Request, res: Response, next: NextFunction) => {
     try {
         logger.info("⚡ Manual force-update requested");
-        await Promise.all([updateTrackerData(), updateNews()]);
+        await Promise.all([updateTrackerData(), updateNews(), updateGasPrices()]);
         res.json({
             success: true,
             message: "Data and news update triggered.",

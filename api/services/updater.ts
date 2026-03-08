@@ -192,11 +192,11 @@ Use integers for casualties. Use the most reliable, recently published sources. 
             gasPrices: parsedData.gasPrices && typeof parsedData.gasPrices === 'object'
                 ? {
                     preConflictPrice: safeNumber(parsedData.gasPrices.preConflictPrice, 2.96, 1, 10),
-                    currentPrice: safeNumber(parsedData.gasPrices.currentPrice, 3.41, 1, 15),
+                    currentPrice: safeNumber(parsedData.gasPrices.currentPrice, 3.45, 1, 15),
                     brentCrudePrice: safeNumber(parsedData.gasPrices.brentCrudePrice, 92.69, 20, 300),
                     brentCrudeChange: safeNumber(parsedData.gasPrices.brentCrudeChange, 19.2, -50, 200),
                 }
-                : { preConflictPrice: 2.96, currentPrice: 3.41, brentCrudePrice: 92.69, brentCrudeChange: 19.2 },
+                : { preConflictPrice: 2.96, currentPrice: 3.45, brentCrudePrice: 92.69, brentCrudeChange: 19.2 },
 
             // Methodology footer with automation note
             methodologyFooter: staticTrackerData.methodologyFooter + " Data is automatically researched and updated periodically using the Gemini API grounded with Google Search.",

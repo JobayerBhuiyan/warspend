@@ -98,6 +98,14 @@ export const OTHER_ESTIMATES = [
   },
 ] as const;
 
+/** Gas prices — fallback values, overridden by live API data */
+export const GAS_PRICES = {
+  preConflictPrice: 2.96,
+  currentPrice: 3.45,
+  brentCrudePrice: 92.69,
+  brentCrudeChange: 19.2,
+} as const;
+
 /** Chart data: interceptor vs drone cost comparison */
 export const COST_COMPARISON_CHART_DATA = [
   { name: "THAAD Interceptor", value: EQUIPMENT_COSTS.thaadInterceptor, fill: "#dc2626" },

@@ -77,7 +77,7 @@ export const trackerData = {
 
     gasPrices: {
         preConflictPrice: 2.96,
-        currentPrice: 3.41,
+        currentPrice: 3.45,
         brentCrudePrice: 92.69,
         brentCrudeChange: 19.2,
     },
