@@ -39,9 +39,7 @@ export function AlternativeMetrics({
   useEffect(() => {
     if (!mounted) return;
 
-    let animationFrameId: number;
-
-    const animate = () => {
+    const update = () => {
       const now = Date.now();
       const elapsed = Math.max(0, now - startTime);
       const days = elapsed / MS_PER_DAY;
@@ -53,15 +51,13 @@ export function AlternativeMetrics({
         children: Math.floor(totalCostUsd / costs.childrenFed),
         students: Math.floor(totalCostUsd / costs.studentLoansForgiven),
       });
-
-      // We use requestAnimationFrame to keep it buttery smooth with the main counter
-      animationFrameId = requestAnimationFrame(animate);
     };
 
-    animationFrameId = requestAnimationFrame(animate);
+    update();
+    const intervalId = setInterval(update, 1000);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      clearInterval(intervalId);
     };
   }, [mounted, startTime, dailyCostUsd, costs]);
 
@@ -123,7 +119,7 @@ export function AlternativeMetrics({
           return (
             <div
               key={item.label}
-              className="rounded-xl glass p-6 flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.02]"
+              className="rounded-xl glass p-6 flex flex-col items-center text-center transition-transform duration-300 hover:scale-[1.02]"
               style={{ borderTop: `2px solid ${item.border}` }}
             >
               <div className="mb-3 p-2.5 rounded-full bg-white/5">

@@ -57,6 +57,9 @@ export function AnimatedCounter({
     }
     physicsRef.current.target = computeCost();
 
+    let settled = false;
+    let settledInterval: ReturnType<typeof setInterval> | null = null;
+
     // Spring animation loop
     const animate = (time: number) => {
       const state = physicsRef.current!;
@@ -81,6 +84,30 @@ export function AnimatedCounter({
         state.value += state.velocity * dt;
 
         setDisplayValue(state.value);
+
+        // Check if spring has settled (close to target, low velocity)
+        if (Math.abs(displacement) < 1 && Math.abs(state.velocity) < 0.5) {
+          settled = true;
+          state.value = state.target;
+          setDisplayValue(state.target);
+          // Switch to slow interval to track drift
+          settledInterval = setInterval(() => {
+            const newTarget = computeCost();
+            if (Math.abs(newTarget - state.value) > 1) {
+              // Target drifted enough — restart spring animation
+              settled = false;
+              if (settledInterval) clearInterval(settledInterval);
+              settledInterval = null;
+              state.target = newTarget;
+              state.lastTime = performance.now();
+              animationFrameId = requestAnimationFrame(animate);
+            } else {
+              state.value = newTarget;
+              setDisplayValue(newTarget);
+            }
+          }, 1000);
+          return;
+        }
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -91,6 +118,7 @@ export function AnimatedCounter({
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      if (settledInterval) clearInterval(settledInterval);
     };
   }, [mounted, startTime, dailyCostUsd]);
 
@@ -103,7 +131,7 @@ export function AnimatedCounter({
 
   return (
     <span
-      className={`tabular-nums inline-block transition-all duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] ${mounted ? "opacity-100 translate-y-0 blur-none" : "opacity-0 translate-y-2 blur-[8px]"
+      className={`tabular-nums inline-block transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] ${mounted ? "opacity-100 translate-y-0 blur-none" : "opacity-0 translate-y-2 blur-[8px]"
         } ${className}`}
       style={{
         textShadow: "0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.1)",

@@ -46,7 +46,7 @@ export function LatestNews({ items }: { items: NewsItem[] }) {
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-start justify-between gap-3 rounded-xl glass glass-hover px-4 py-3.5 transition-all duration-300"
+                        className="group flex items-start justify-between gap-3 rounded-xl glass glass-hover px-4 py-3.5 transition-[background-color,border-color] duration-300"
                     >
                         <div className="flex-1 min-w-0">
                             <p className="font-medium text-zinc-200 group-hover:text-red-400 transition-colors line-clamp-2">

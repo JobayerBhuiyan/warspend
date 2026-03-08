@@ -45,7 +45,7 @@ export function ShareActions() {
   };
 
   const btnClass =
-    "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-300 glass glass-hover hover:text-zinc-100";
+    "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-300 transition-[background-color,color,border-color] duration-300 glass glass-hover hover:text-zinc-100";
 
   return (
     <div className="flex items-center gap-3">

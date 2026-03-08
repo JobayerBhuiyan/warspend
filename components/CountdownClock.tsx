@@ -48,7 +48,7 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
 
     return (
         <div
-            className={`flex items-center justify-center gap-2 sm:gap-3 transition-all duration-500 ease-out ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            className={`flex items-center justify-center gap-2 sm:gap-3 transition-[opacity,transform] duration-500 ease-out ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                 } ${className}`}
         >
             {units.map((unit, i) => (

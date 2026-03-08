@@ -17,7 +17,7 @@ export function CostRates({ dailyCostUsd }: { dailyCostUsd: number }) {
                 {rates.map((rate) => (
                     <div
                         key={rate.label}
-                        className="group relative flex flex-col items-center justify-center rounded-xl p-6 glass transition-all duration-300 hover:scale-[1.02]"
+                        className="group relative flex flex-col items-center justify-center rounded-xl p-6 glass transition-transform duration-300 hover:scale-[1.02]"
                         style={{
                             borderTop: "1px solid rgba(239, 68, 68, 0.2)",
                         }}
