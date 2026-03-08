@@ -29,12 +29,14 @@ export function LatestNews({ items }: { items: NewsItem[] }) {
 
     return (
         <section className="mt-10">
-            <div className="flex items-center gap-2 mb-6">
-                <Newspaper className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
-                <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center gap-3 mb-6">
+                <div className="rounded-lg bg-white/5 p-2 ring-1 ring-white/10">
+                    <Newspaper className="h-4 w-4 text-zinc-400" />
+                </div>
+                <h2 className="text-xl font-semibold text-zinc-100">
                     Latest News
                 </h2>
-                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-400 ring-1 ring-emerald-500/20">
                     Auto-Updated
                 </span>
             </div>
@@ -45,22 +47,24 @@ export function LatestNews({ items }: { items: NewsItem[] }) {
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-start justify-between gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800/70 group"
+                        className="group flex items-start justify-between gap-3 rounded-xl glass glass-hover px-4 py-3.5 transition-all duration-300"
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: i * 0.03 }}
                     >
                         <div className="flex-1 min-w-0">
-                            <p className="font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
+                            <p className="font-medium text-zinc-200 group-hover:text-red-400 transition-colors line-clamp-2">
                                 {item.title}
                             </p>
-                            <div className="mt-1 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                                <span className="font-medium">{item.source}</span>
-                                <span>·</span>
+                            <div className="mt-1.5 flex items-center gap-2 text-xs text-zinc-500">
+                                <span className="rounded-full bg-white/5 px-2 py-0.5 text-zinc-400 font-medium">
+                                    {item.source}
+                                </span>
+                                <span className="text-zinc-600">·</span>
                                 <span>{timeAgo(item.pubDate)}</span>
                             </div>
                         </div>
-                        <ExternalLink className="h-4 w-4 flex-shrink-0 mt-1 text-zinc-400 group-hover:text-red-500 transition-colors" />
+                        <ExternalLink className="h-4 w-4 flex-shrink-0 mt-1 text-zinc-600 group-hover:text-red-400 transition-colors" />
                     </motion.a>
                 ))}
             </div>

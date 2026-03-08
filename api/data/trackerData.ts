@@ -74,4 +74,11 @@ export const trackerData = {
 
     methodologyFooter:
         "This tracker exists because the public deserves real-time transparency about the cost of military operations — not just after-the-fact reports years later. The counter uses the Pentagon's own preliminary estimate of $1 billion per day. CSIS independently estimates an average of $891.4 million per day for the first 100 hours, with $3.5B of that unbudgeted. Independent analyses suggest the true cost may be significantly higher.",
+
+    gasPrices: {
+        preConflictPrice: 2.96,
+        currentPrice: 3.41,
+        brentCrudePrice: 92.69,
+        brentCrudeChange: 19.2,
+    },
 };

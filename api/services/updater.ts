@@ -31,6 +31,7 @@ Research and return ALL of the following categories:
    - Number planned for 2026
 5. **Other cost estimates** from think tanks and news sources (Penn Wharton, CSIS, Center for American Progress, etc.)
 6. **New major events** since Feb 28, 2026 — any significant strikes, escalations, or developments that should be added to a war timeline. Include date, title, short description, and estimated cost if known.
+7. **Gas prices** — current U.S. national average gas price per gallon, the pre-conflict price (around Feb 26, 2026), Brent crude oil price per barrel, and percentage change in Brent crude since pre-conflict.
 
 Return the data STRICTLY as a JSON object matching this structure. Do NOT wrap in markdown code blocks, return raw JSON only.
 
@@ -68,7 +69,13 @@ Return the data STRICTLY as a JSON object matching this structure. Do NOT wrap i
       "cost": "$X,XXX,XXX or null",
       "isMajor": boolean
     }
-  ]
+  ],
+  "gasPrices": {
+    "preConflictPrice": number,
+    "currentPrice": number,
+    "brentCrudePrice": number,
+    "brentCrudeChange": number
+  }
 }
 
 Use integers for casualties. Use the most reliable, recently published sources. Include at least 5 cost estimates in otherEstimates. Only include newTimelineEvents if there are genuinely new developments not already in the existing timeline.
@@ -181,8 +188,18 @@ Use integers for casualties. Use the most reliable, recently published sources. 
                     ? parsedData.newTimelineEvents
                     : [],
 
+            // Gas prices
+            gasPrices: parsedData.gasPrices && typeof parsedData.gasPrices === 'object'
+                ? {
+                    preConflictPrice: safeNumber(parsedData.gasPrices.preConflictPrice, 2.96, 1, 10),
+                    currentPrice: safeNumber(parsedData.gasPrices.currentPrice, 3.41, 1, 15),
+                    brentCrudePrice: safeNumber(parsedData.gasPrices.brentCrudePrice, 92.69, 20, 300),
+                    brentCrudeChange: safeNumber(parsedData.gasPrices.brentCrudeChange, 19.2, -50, 200),
+                }
+                : { preConflictPrice: 2.96, currentPrice: 3.41, brentCrudePrice: 92.69, brentCrudeChange: 19.2 },
+
             // Methodology footer with automation note
-            methodologyFooter: staticTrackerData.methodologyFooter + " Data is automatically researched and updated every 6 hours using the Gemini API grounded with Google Search.",
+            methodologyFooter: staticTrackerData.methodologyFooter + " Data is automatically researched and updated periodically using the Gemini API grounded with Google Search.",
         };
 
         return updatedTrackerData;

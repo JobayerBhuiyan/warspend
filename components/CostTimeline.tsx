@@ -46,6 +46,51 @@ export const timelineEvents = [
         description: "Anti-ship missile strikes on Iranian naval forces. Est. ~30–50 Harpoon ($1.5M ea) and Naval Strike Missiles ($2.2M ea) expended to neutralize 9 Iranian vessels. Separate from Tomahawk strikes already counted.",
         cost: "$75,000,000",
     },
+    {
+        date: "MAR 2 · 06:00 UTC",
+        title: "B-2 Spirit strikes on Natanz nuclear facility",
+        description: "Multiple B-2 Spirit sorties deploying GBU-57 MOPs on underground centrifuge halls. Est. 12 MOPs at ~$3.5M each plus B-2 flight costs ($150K/hr × 36 hrs per sortie).",
+        cost: "$52,000,000",
+        isMajor: true,
+    },
+    {
+        date: "MAR 2 · 14:00 UTC",
+        title: "F-35A achieves air superiority over western Iran",
+        description: "Multiple F-35A sorties from Al Dhafra engage Iranian fighters. Est. 200+ AIM-120D ($1.8M each) and AIM-9X ($400K each) expended. 14 Iranian aircraft downed.",
+        cost: "$440,000,000",
+    },
+    {
+        date: "MAR 3 · 08:00 UTC",
+        title: "Carrier Strike Group 2 – Tomahawk barrage",
+        description: "USS Dwight D. Eisenhower CSG launches second wave of ~120 Tomahawk cruise missiles targeting IRGC command infrastructure.",
+        cost: "$432,000,000",
+        isMajor: true,
+    },
+    {
+        date: "MAR 4 · 02:00 UTC",
+        title: "IRGC Quds Force HQ targeted – Isfahan",
+        description: "Precision strikes on IRGC Quds Force headquarters complex using JDAM and SDB II. Multiple IRGC senior commanders reported killed.",
+        cost: "$15,000,000",
+    },
+    {
+        date: "MAR 5 · 10:00 UTC",
+        title: "Ticonderoga-class cruiser SM-3 intercepts",
+        description: "USS Lake Champlain intercepts 18 Iranian ballistic missiles launched at Al Udeid Air Base. SM-3 Block IIA interceptors at ~$36M each.",
+        cost: "$648,000,000",
+    },
+    {
+        date: "MAR 6 · 00:00 UTC",
+        title: "Strikes on Iranian oil infrastructure – Kharg Island",
+        description: "Precision strikes on oil export terminals and refinery complexes. Brent crude spikes to $92+/bbl. Estimated 80+ precision-guided munitions deployed.",
+        cost: "$120,000,000",
+        isMajor: true,
+    },
+    {
+        date: "MAR 7 · 04:00 UTC",
+        title: "Continued SEAD/DEAD and ISR operations",
+        description: "Ongoing suppression of Iranian air defense networks. MQ-9 Reaper and RQ-170 Sentinel ISR sorties sustaining 24/7 surveillance. F-16CJ Wild Weasel missions continue.",
+        cost: "$85,000,000",
+    },
 ];
 
 type TimelineEvent = {
@@ -62,25 +107,46 @@ export function CostTimeline({ extraEvents = [] }: { extraEvents?: TimelineEvent
 
     return (
         <div className="w-full max-w-3xl font-mono text-zinc-300">
-            <h2 className="text-xs font-semibold tracking-[0.2em] mb-8 text-zinc-400">WHAT HAS THAT MONEY BOUGHT</h2>
+            <h2 className="text-xs font-semibold tracking-[0.2em] mb-8 text-zinc-500 uppercase">
+                What Has That Money Bought
+            </h2>
 
-            <div className="relative border-l border-zinc-700/50 pl-6 pb-4">
+            <div className="relative pl-6 pb-4">
+                {/* Gradient timeline line */}
+                <div
+                    className="absolute left-0 top-0 bottom-0 w-px"
+                    style={{
+                        background: "linear-gradient(180deg, rgba(239,68,68,0.3) 0%, rgba(255,255,255,0.06) 50%, transparent 100%)",
+                    }}
+                />
+
                 {allEvents.map((event, i) => (
-                    <div key={i} className="mb-10 last:mb-0 relative">
-                        <div className={`absolute -left-[30px] top-1.5 h-2 w-2 rounded-full ring-4 ring-[#101010] ${event.isMajor ? "bg-red-500" : "bg-zinc-600"}`}></div>
+                    <div key={i} className="mb-10 last:mb-0 relative group">
+                        {/* Timeline dot */}
+                        <div
+                            className="absolute -left-[24px] top-1.5 h-2.5 w-2.5 rounded-full"
+                            style={{
+                                background: event.isMajor ? "#ef4444" : "#3f3f46",
+                                boxShadow: event.isMajor
+                                    ? "0 0 8px rgba(239, 68, 68, 0.6), 0 0 20px rgba(239, 68, 68, 0.2)"
+                                    : "0 0 4px rgba(63, 63, 70, 0.3)",
+                            }}
+                        />
 
                         <div className="flex flex-col gap-1.5">
-                            <span className="text-xs text-zinc-500 tracking-wider">
+                            <span className="text-xs text-zinc-600 tracking-wider font-mono">
                                 {event.date}
                             </span>
-                            <h3 className="text-[15px] font-medium text-zinc-200 uppercase font-sans">
+                            <h3 className="text-[15px] font-medium text-zinc-200 uppercase font-sans leading-snug">
                                 {event.title}
                             </h3>
                             <p className="text-sm text-zinc-500 font-sans leading-relaxed">
                                 {event.description}
                             </p>
                             {event.cost && (
-                                <p className="text-sm text-[#ffaa99] mt-1 font-mono">
+                                <p
+                                    className="text-sm mt-1 font-mono font-medium text-gradient-red inline-block"
+                                >
                                     Tracked cost: {event.cost}
                                 </p>
                             )}

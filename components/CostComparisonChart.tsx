@@ -39,9 +39,9 @@ const CustomTooltip = ({
   if (!active || !payload?.length) return null;
   const item = payload[0].payload;
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-800">
-      <p className="font-medium text-zinc-900 dark:text-zinc-100">{item.name}</p>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+    <div className="glass rounded-lg px-4 py-3 shadow-2xl" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+      <p className="font-medium text-zinc-100">{item.name}</p>
+      <p className="text-sm text-zinc-400 mt-0.5">
         {item.value.toLocaleString("en-US", {
           style: "currency",
           currency: "USD",
@@ -62,11 +62,11 @@ export function CostComparisonChart({
 
   return (
     <div className={className}>
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-zinc-100">
           Interceptor vs Drone Cost
         </h3>
-        <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-800 dark:bg-red-900/40 dark:text-red-300">
+        <span className="rounded-full bg-red-500/10 px-3 py-1 text-sm font-medium text-red-400 ring-1 ring-red-500/20">
           Cost ratio: {costRatio}:1
         </span>
       </div>
@@ -79,25 +79,28 @@ export function CostComparisonChart({
           >
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="#e4e4e7"
+              stroke="rgba(255,255,255,0.04)"
               horizontal={false}
             />
             <XAxis
               type="number"
               tickFormatter={(v) => formatTooltipValue(v)}
-              stroke="#71717a"
+              stroke="#52525b"
               fontSize={12}
+              tickLine={false}
+              axisLine={false}
             />
             <YAxis
               type="category"
               dataKey="name"
               width={140}
-              stroke="#71717a"
+              stroke="#52525b"
               fontSize={12}
               tickLine={false}
+              axisLine={false}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(0,0,0,0.05)" }} />
-            <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={32}>
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+            <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={28}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}

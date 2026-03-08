@@ -58,6 +58,12 @@ export type TrackerData = {
   lastUpdated?: string;
   latestNews: NewsItem[];
   timelineEvents: TimelineEvent[];
+  gasPrices: {
+    preConflictPrice: number;
+    currentPrice: number;
+    brentCrudePrice: number;
+    brentCrudeChange: number;
+  };
 };
 
 /** Shape of JSON returned by the Railway API */
@@ -91,6 +97,12 @@ type ApiTrackerData = {
   methodologyFooter?: string;
   latestNews?: NewsItem[];
   newTimelineEvents?: TimelineEvent[];
+  gasPrices?: {
+    preConflictPrice?: number;
+    currentPrice?: number;
+    brentCrudePrice?: number;
+    brentCrudeChange?: number;
+  };
   _servedAt?: string;
 };
 
@@ -145,6 +157,12 @@ function mapApiToTrackerData(data: ApiTrackerData): TrackerData {
     lastUpdated: data._servedAt,
     latestNews: data.latestNews ?? [],
     timelineEvents: data.newTimelineEvents ?? [],
+    gasPrices: {
+      preConflictPrice: data.gasPrices?.preConflictPrice ?? 2.96,
+      currentPrice: data.gasPrices?.currentPrice ?? 3.41,
+      brentCrudePrice: data.gasPrices?.brentCrudePrice ?? 92.69,
+      brentCrudeChange: data.gasPrices?.brentCrudeChange ?? 19.2,
+    },
   };
 }
 
@@ -172,6 +190,12 @@ function getFallbackData(): TrackerData {
       "This tracker exists because the public deserves real-time transparency about the cost of military operations — not just after-the-fact reports years later. The counter uses the Pentagon's own preliminary estimate of $1 billion per day. Independent analyses suggest the true cost may be significantly higher.",
     latestNews: [],
     timelineEvents: [],
+    gasPrices: {
+      preConflictPrice: 2.96,
+      currentPrice: 3.41,
+      brentCrudePrice: 92.69,
+      brentCrudeChange: 19.2,
+    },
   };
 }
 
@@ -189,7 +213,7 @@ export async function getTrackerData(): Promise<TrackerData> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/tracker-data`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 900 } }
     );
 
     if (!res.ok) {

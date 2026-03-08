@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Share2 } from "lucide-react";
+import { Copy, Share2, Check } from "lucide-react";
 
 export function ShareActions() {
   const [copied, setCopied] = useState(false);
@@ -44,33 +44,26 @@ export function ShareActions() {
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
   };
 
+  const btnClass =
+    "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-300 glass glass-hover hover:text-zinc-100";
+
   return (
     <div className="flex items-center gap-3">
-      <button
-        type="button"
-        onClick={handleXPost}
-        className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#1a1a1a] px-4 py-2 text-sm font-medium text-zinc-300 transition hover:bg-[#222]"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+      <button type="button" onClick={handleXPost} className={btnClass}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
         Post
       </button>
       {canShare && (
-        <button
-          type="button"
-          onClick={handleShare}
-          className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#1a1a1a] px-4 py-2 text-sm font-medium text-zinc-300 transition hover:bg-[#222]"
-        >
+        <button type="button" onClick={handleShare} className={btnClass}>
           <Share2 className="h-4 w-4" />
           Share
         </button>
       )}
-      <button
-        type="button"
-        onClick={handleCopy}
-        className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#1a1a1a] px-4 py-2 text-sm font-medium text-zinc-300 transition hover:bg-[#222]"
-      >
-        <Copy className="h-4 w-4" />
-        {copied ? "Copied" : "Copy Link"}
+      <button type="button" onClick={handleCopy} className={btnClass}>
+        {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4" />}
+        {copied ? "Copied!" : "Copy Link"}
       </button>
     </div>
   );

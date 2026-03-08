@@ -56,10 +56,13 @@ export function AnimatedCounter({
 
   return (
     <motion.span
-      className={className}
-      initial={{ opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      className={`tabular-nums ${className}`}
+      initial={{ opacity: 0, y: 8, filter: "blur(8px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+      style={{
+        textShadow: "0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.1)",
+      }}
     >
       {mounted ? formatted : "$0"}
     </motion.span>
