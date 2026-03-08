@@ -47,25 +47,19 @@ export function AnimatedCounter({
       return days * dailyCostUsd;
     };
 
-    // Update the target value periodically
-    const updateTarget = () => {
-      physicsRef.current.target = computeCost();
-    };
-
     // Initial target set
-    updateTarget();
-    targetIntervalId = window.setInterval(updateTarget, 100);
+    physicsRef.current.target = computeCost();
 
     // Spring animation loop
     const animate = (time: number) => {
       const state = physicsRef.current;
 
-      // Calculate delta time in seconds, capped at 64ms (approx 15fps)
-      // to avoid huge jumps if the tab is backgrounded
       const dt = Math.min((time - state.lastTime) / 1000, 0.064);
       state.lastTime = time;
 
       if (dt > 0) {
+        state.target = computeCost();
+
         // Spring physics: F = -k*x - c*v
         const displacement = state.value - state.target;
         const springForce = -stiffness * displacement;
@@ -79,12 +73,6 @@ export function AnimatedCounter({
         // p = p + v*dt
         state.value += state.velocity * dt;
 
-        // If very close to target and moving very slowly, snap to target
-        if (Math.abs(state.value - state.target) < 0.1 && Math.abs(state.velocity) < 0.1) {
-          state.value = state.target;
-          state.velocity = 0;
-        }
-
         setDisplayValue(state.value);
       }
 
@@ -95,7 +83,6 @@ export function AnimatedCounter({
     animationFrameId = requestAnimationFrame(animate);
 
     return () => {
-      clearInterval(targetIntervalId);
       cancelAnimationFrame(animationFrameId);
     };
   }, [mounted, startTime, dailyCostUsd]);
