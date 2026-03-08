@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const MS_PER_HOUR = 60 * 60 * 1000;
@@ -20,8 +20,15 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
     const minRef = useRef<HTMLSpanElement>(null);
     const secRef = useRef<HTMLSpanElement>(null);
     const mountedRef = useRef(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!mounted) return;
         if (mountedRef.current) return;
         mountedRef.current = true;
 
@@ -54,7 +61,7 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
         update();
         const interval = setInterval(update, 1000);
         return () => clearInterval(interval);
-    }, [startTime]);
+    }, [mounted, startTime]);
 
     const unitStyle = { textShadow: "0 0 15px rgba(239, 68, 68, 0.4), 0 0 30px rgba(239, 68, 68, 0.2)" };
     const unitClass = "inline-flex items-center justify-center rounded-xl bg-[#1a151b] px-3 py-2 sm:px-4 sm:py-3 font-mono text-2xl sm:text-3xl font-bold text-red-400 tabular-nums ring-1 ring-red-900/20 min-w-[3rem] sm:min-w-[4rem] shadow-inner";
@@ -62,6 +69,7 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
     return (
         <div
             ref={containerRef}
+            suppressHydrationWarning
             className={`flex items-center justify-center gap-2 sm:gap-3 transition-[opacity,transform] duration-500 ease-out opacity-0 translate-y-2 ${className}`}
         >
             {([["DAYS", daysRef], ["HRS", hrsRef], ["MIN", minRef], ["SEC", secRef]] as const).map(([label, ref], i) => (

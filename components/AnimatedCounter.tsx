@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -26,6 +26,7 @@ export function AnimatedCounter({
   const startTime = new Date(startDateIso).getTime();
   const spanRef = useRef<HTMLSpanElement>(null);
   const mountedRef = useRef(false);
+  const [mounted, setMounted] = useState(false);
 
   // Native spring physics state
   const physicsRef = useRef<{
@@ -43,6 +44,12 @@ export function AnimatedCounter({
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     if (mountedRef.current) return;
     mountedRef.current = true;
 
@@ -107,7 +114,6 @@ export function AnimatedCounter({
           settledInterval = setInterval(() => {
             const newTarget = computeCost();
             if (Math.abs(newTarget - state.value) > 1) {
-              // Target drifted enough — restart spring animation
               if (settledInterval) clearInterval(settledInterval);
               settledInterval = null;
               state.target = newTarget;
@@ -131,11 +137,12 @@ export function AnimatedCounter({
       cancelAnimationFrame(animationFrameId);
       if (settledInterval) clearInterval(settledInterval);
     };
-  }, [startTime, dailyCostUsd, updateDOM]);
+  }, [mounted, startTime, dailyCostUsd, updateDOM]);
 
   return (
     <span
       ref={spanRef}
+      suppressHydrationWarning
       className={`tabular-nums inline-block transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)] will-change-[opacity,transform] opacity-0 translate-y-2 ${className}`}
       style={{
         textShadow: "0 0 20px rgba(239, 68, 68, 0.5), 0 0 40px rgba(239, 68, 68, 0.3), 0 0 80px rgba(239, 68, 68, 0.15)",

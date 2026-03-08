@@ -118,7 +118,7 @@ export function PageContent() {
                 <AnimatedCounter
                   startDateIso={data.startDateIso}
                   dailyCostUsd={data.trackerConfig.dailyCostUsd}
-                  className="text-4xl font-bold text-gradient-red sm:text-5xl md:text-6xl lg:text-7xl"
+                  className="text-4xl font-bold text-[#ff5a5a] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight"
                 />
               </div>
               <p className="mt-4 text-sm text-zinc-500 font-mono">
