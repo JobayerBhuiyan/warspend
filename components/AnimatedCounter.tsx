@@ -43,7 +43,7 @@ export function AnimatedCounter({
     const computeCost = () => {
       const now = Date.now();
       const elapsed = Math.max(0, now - startTime);
-      const days = Math.floor(elapsed / MS_PER_DAY * 1000) / 1000;
+      const days = elapsed / MS_PER_DAY;
       return days * dailyCostUsd;
     };
 
