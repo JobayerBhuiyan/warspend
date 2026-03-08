@@ -27,9 +27,17 @@ const limiter = rateLimit({
 });
 
 // Configure CORS
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL || 'https://warspend.com']
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+const allowedOrigins = [
+    'https://warspend.com',
+    'https://www.warspend.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+];
+
+// Add custom FRONTEND_URL if provided
+if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
 
 app.use(cors({
     origin: function (origin, callback) {
