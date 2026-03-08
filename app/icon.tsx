@@ -8,16 +8,17 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 20,
-          fontWeight: 700,
-          background: "#dc2626",
+          fontSize: 22,
+          fontWeight: 800,
+          background: "#ef4444", // Red-500
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           color: "white",
-          borderRadius: 6,
+          borderRadius: 8,
+          border: "1px solid #f87171", // Lighter red for top-edge bevel effect
         }}
       >
         $

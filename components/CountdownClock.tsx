@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const MS_PER_HOUR = 60 * 60 * 1000;
@@ -48,11 +47,9 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
     ];
 
     return (
-        <motion.div
-            className={`flex items-center justify-center gap-2 sm:gap-3 ${className}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 8 }}
-            transition={{ duration: 0.6 }}
+        <div
+            className={`flex items-center justify-center gap-2 sm:gap-3 transition-all duration-500 ease-out ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                } ${className}`}
         >
             {units.map((unit, i) => (
                 <div key={unit.label} className="flex items-center gap-2 sm:gap-3">
@@ -63,7 +60,7 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
                                 textShadow: "0 0 20px rgba(239, 68, 68, 0.3)",
                             }}
                         >
-                            {String(unit.value).padStart(2, "0")}
+                            {mounted ? String(unit.value).padStart(2, "0") : "00"}
                         </span>
                         <span className="mt-1.5 text-[10px] font-mono tracking-[0.2em] text-zinc-600">
                             {unit.label}
@@ -74,6 +71,6 @@ export function CountdownClock({ startDateIso, className = "" }: CountdownClockP
                     )}
                 </div>
             ))}
-        </motion.div>
+        </div>
     );
 }

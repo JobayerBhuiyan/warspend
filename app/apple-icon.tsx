@@ -8,16 +8,18 @@ export default function AppleIcon() {
     (
       <div
         style={{
-          fontSize: 72,
-          fontWeight: 700,
-          background: "#dc2626",
+          fontSize: 110,
+          fontWeight: 800,
+          background: "#ef4444",
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           color: "white",
-          borderRadius: 24,
+          borderRadius: 40,
+          border: "4px solid #f87171",
+          boxShadow: "inset 0px -8px 16px rgba(153, 27, 27, 0.4)", // Inner shadow for 3D pillowy effect
         }}
       >
         $
