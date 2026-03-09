@@ -51,6 +51,7 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
       });
 
       socket.on("tracker_updated", (raw: unknown) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = raw as any;
         setData((prev) => {
           // Derive equipment costs
