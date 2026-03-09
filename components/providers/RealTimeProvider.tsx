@@ -50,7 +50,7 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
         console.log("🟢 Connected to live tracker stream");
       });
 
-      socket.on("tracker_updated", (raw: any) => {
+      socket.on("tracker_updated", (raw: unknown) => {
         setData((prev) => {
           // Derive equipment costs
           const newEquipment = raw.equipmentCosts

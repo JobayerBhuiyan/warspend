@@ -1,5 +1,5 @@
-const gasPriceFetcher = require("./api/services/gasPriceFetcher.ts");
-const newsFetcher = require("./api/services/newsFetcher.ts");
+import * as gasPriceFetcher from "./api/services/gasPriceFetcher";
+import * as newsFetcher from "./api/services/newsFetcher";
 
 async function main() {
   const prices = await gasPriceFetcher.fetchGasPrices();
