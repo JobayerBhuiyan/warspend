@@ -51,13 +51,14 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
       });
 
       socket.on("tracker_updated", (raw: unknown) => {
+        const data = raw as any;
         setData((prev) => {
           // Derive equipment costs
-          const newEquipment = raw.equipmentCosts
+          const newEquipment = data.equipmentCosts
             ? {
-                thaadInterceptor: raw.equipmentCosts.thaadInterceptor ?? prev.equipmentCosts.thaadInterceptor,
-                patriotPac3: raw.equipmentCosts.patriotPac3 ?? prev.equipmentCosts.patriotPac3,
-                iranianShahed136: raw.equipmentCosts.iranianShahed136 ?? prev.equipmentCosts.iranianShahed136,
+                thaadInterceptor: data.equipmentCosts.thaadInterceptor ?? prev.equipmentCosts.thaadInterceptor,
+                patriotPac3: data.equipmentCosts.patriotPac3 ?? prev.equipmentCosts.patriotPac3,
+                iranianShahed136: data.equipmentCosts.iranianShahed136 ?? prev.equipmentCosts.iranianShahed136,
               }
             : prev.equipmentCosts;
 
@@ -66,12 +67,12 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
           return {
             ...prev,
             trackerConfig: {
-              startDate: raw.startDateIso ?? prev.trackerConfig.startDate,
-              dailyCostUsd: raw.dailyCostUsd ?? prev.trackerConfig.dailyCostUsd,
-              operationName: raw.operationName ?? prev.trackerConfig.operationName,
-              strikesStartLabel: raw.strikesStartLabel ?? prev.trackerConfig.strikesStartLabel,
+              startDate: data.startDateIso ?? prev.trackerConfig.startDate,
+              dailyCostUsd: data.dailyCostUsd ?? prev.trackerConfig.dailyCostUsd,
+              operationName: data.operationName ?? prev.trackerConfig.operationName,
+              strikesStartLabel: data.strikesStartLabel ?? prev.trackerConfig.strikesStartLabel,
             },
-            startDateIso: raw.startDateIso ?? prev.startDateIso,
+            startDateIso: data.startDateIso ?? prev.startDateIso,
             equipmentCosts: newEquipment,
             costRatio: newCostRatio,
             // Regenerate chart data from latest equipment costs
@@ -80,45 +81,45 @@ export function RealTimeProvider({ initialData, children }: RealTimeProviderProp
               { name: "Patriot PAC-3", value: newEquipment.patriotPac3, fill: "#ea580c" },
               { name: "Iranian Shahed-136", value: newEquipment.iranianShahed136, fill: "#4b5563" },
             ],
-            stockpile: raw.stockpile
+            stockpile: data.stockpile
               ? {
-                  totalThaadInterceptors: raw.stockpile.totalThaadInterceptors ?? prev.stockpile.totalThaadInterceptors,
-                  usedInJune2025War: raw.stockpile.usedInJune2025War ?? prev.stockpile.usedInJune2025War,
-                  purchased2025: raw.stockpile.purchased2025 ?? prev.stockpile.purchased2025,
-                  planned2026: raw.stockpile.planned2026 ?? prev.stockpile.planned2026,
+                  totalThaadInterceptors: data.stockpile.totalThaadInterceptors ?? prev.stockpile.totalThaadInterceptors,
+                  usedInJune2025War: data.stockpile.usedInJune2025War ?? prev.stockpile.usedInJune2025War,
+                  purchased2025: data.stockpile.purchased2025 ?? prev.stockpile.purchased2025,
+                  planned2026: data.stockpile.planned2026 ?? prev.stockpile.planned2026,
                 }
               : prev.stockpile,
-            humanCost: raw.humanCost
+            humanCost: data.humanCost
               ? {
-                  usKilled: raw.humanCost.usKilled ?? prev.humanCost.usKilled,
-                  usWounded: raw.humanCost.usWounded ?? prev.humanCost.usWounded,
-                  iranianMilitaryKilled: raw.humanCost.iranianMilitaryKilled ?? prev.humanCost.iranianMilitaryKilled,
-                  iranianMilitaryNote: raw.humanCost.iranianMilitaryNote ?? prev.humanCost.iranianMilitaryNote,
-                  iranianCiviliansKilled: raw.humanCost.iranianCiviliansKilled ?? prev.humanCost.iranianCiviliansKilled,
-                  iranianCiviliansWounded: raw.humanCost.iranianCiviliansWounded ?? prev.humanCost.iranianCiviliansWounded,
+                  usKilled: data.humanCost.usKilled ?? prev.humanCost.usKilled,
+                  usWounded: data.humanCost.usWounded ?? prev.humanCost.usWounded,
+                  iranianMilitaryKilled: data.humanCost.iranianMilitaryKilled ?? prev.humanCost.iranianMilitaryKilled,
+                  iranianMilitaryNote: data.humanCost.iranianMilitaryNote ?? prev.humanCost.iranianMilitaryNote,
+                  iranianCiviliansKilled: data.humanCost.iranianCiviliansKilled ?? prev.humanCost.iranianCiviliansKilled,
+                  iranianCiviliansWounded: data.humanCost.iranianCiviliansWounded ?? prev.humanCost.iranianCiviliansWounded,
                 }
               : prev.humanCost,
             otherEstimates:
-              raw.otherEstimates && Array.isArray(raw.otherEstimates) && raw.otherEstimates.length > 0
-                ? raw.otherEstimates
+              data.otherEstimates && Array.isArray(data.otherEstimates) && data.otherEstimates.length > 0
+                ? data.otherEstimates
                 : prev.otherEstimates,
             latestNews:
-              raw.latestNews && Array.isArray(raw.latestNews) ? raw.latestNews : prev.latestNews,
+              data.latestNews && Array.isArray(data.latestNews) ? data.latestNews : prev.latestNews,
             timelineEvents:
-              raw.newTimelineEvents && Array.isArray(raw.newTimelineEvents)
-                ? raw.newTimelineEvents
+              data.newTimelineEvents && Array.isArray(data.newTimelineEvents)
+                ? data.newTimelineEvents
                 : prev.timelineEvents,
-            gasPrices: raw.gasPrices
+            gasPrices: data.gasPrices
               ? {
-                  preConflictPrice: raw.gasPrices.preConflictPrice ?? prev.gasPrices.preConflictPrice,
-                  currentPrice: raw.gasPrices.currentPrice ?? prev.gasPrices.currentPrice,
-                  brentCrudePrice: raw.gasPrices.brentCrudePrice ?? prev.gasPrices.brentCrudePrice,
-                  brentCrudeChange: raw.gasPrices.brentCrudeChange ?? prev.gasPrices.brentCrudeChange,
+                  preConflictPrice: data.gasPrices.preConflictPrice ?? prev.gasPrices.preConflictPrice,
+                  currentPrice: data.gasPrices.currentPrice ?? prev.gasPrices.currentPrice,
+                  brentCrudePrice: data.gasPrices.brentCrudePrice ?? prev.gasPrices.brentCrudePrice,
+                  brentCrudeChange: data.gasPrices.brentCrudeChange ?? prev.gasPrices.brentCrudeChange,
                 }
               : prev.gasPrices,
-            methodologyText: raw.methodologyText ?? prev.methodologyText,
-            methodologyFooter: raw.methodologyFooter ?? prev.methodologyFooter,
-            lastUpdated: raw._servedAt ?? prev.lastUpdated,
+            methodologyText: data.methodologyText ?? prev.methodologyText,
+            methodologyFooter: data.methodologyFooter ?? prev.methodologyFooter,
+            lastUpdated: data._servedAt ?? prev.lastUpdated,
           };
         });
       });
