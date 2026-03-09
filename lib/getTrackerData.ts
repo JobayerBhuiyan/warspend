@@ -72,6 +72,17 @@ export type TrackerData = {
     brentCrudePrice: number;
     brentCrudeChange: number;
   };
+  marketImpact?: {
+    sp500ChangePct: number;
+    goldPriceUsd: number;
+    lmtStockPrice: number;
+    rtxStockPrice: number;
+  };
+  sentiment?: {
+    globalApproval: string;
+    troopDeploymentEstimate: number;
+    dominantNarrative: string;
+  };
 };
 
 /** Shape of JSON returned by the Railway API */
@@ -110,6 +121,17 @@ type ApiTrackerData = {
     currentPrice?: number;
     brentCrudePrice?: number;
     brentCrudeChange?: number;
+  };
+  marketImpact?: {
+    sp500ChangePct?: number;
+    goldPriceUsd?: number;
+    lmtStockPrice?: number;
+    rtxStockPrice?: number;
+  };
+  sentiment?: {
+    globalApproval?: string;
+    troopDeploymentEstimate?: number;
+    dominantNarrative?: string;
   };
   _servedAt?: string;
 };
@@ -172,6 +194,17 @@ function mapApiToTrackerData(data: ApiTrackerData): TrackerData {
       brentCrudePrice: data.gasPrices?.brentCrudePrice ?? GAS_PRICES.brentCrudePrice,
       brentCrudeChange: data.gasPrices?.brentCrudeChange ?? GAS_PRICES.brentCrudeChange,
     },
+    marketImpact: data.marketImpact?.sp500ChangePct !== undefined ? {
+      sp500ChangePct: data.marketImpact.sp500ChangePct ?? 0,
+      goldPriceUsd: data.marketImpact.goldPriceUsd ?? 2800,
+      lmtStockPrice: data.marketImpact.lmtStockPrice ?? 450,
+      rtxStockPrice: data.marketImpact.rtxStockPrice ?? 120,
+    } : undefined,
+    sentiment: data.sentiment?.globalApproval !== undefined ? {
+      globalApproval: data.sentiment.globalApproval ?? "Mixed to critical",
+      troopDeploymentEstimate: data.sentiment.troopDeploymentEstimate ?? 40000,
+      dominantNarrative: data.sentiment.dominantNarrative ?? "Escalation concerns growing",
+    } : undefined,
   };
 }
 

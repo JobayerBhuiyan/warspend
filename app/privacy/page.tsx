@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { AdSense } from "@/components/AdSense";
+import { AdSense } from "@/components/shared/AdSense";
 
 export const metadata = {
     title: "Privacy Policy | Iran War Spend Tracker",

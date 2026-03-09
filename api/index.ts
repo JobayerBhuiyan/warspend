@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
+import http from "http";
+import { Server as SocketIOServer } from "socket.io";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -9,6 +11,7 @@ import { fetchGasPrices } from "./services/gasPriceFetcher";
 import { logger, httpLogger } from "./utils/logger";
 
 const app = express();
+const server = http.createServer(app);
 const PORT = parseInt(process.env.PORT || "3001", 10);
 
 // Configure CORS - MUST be before helmet and other middleware
@@ -48,8 +51,14 @@ const corsOptions = {
 // Apply CORS before everything else
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly
-app.options("*", cors(corsOptions));
+// Handle preflight requests explicitly - use regex to match all routes
+app.options(/.*/, (_req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigins.join(", "));
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(200);
+});
 
 // Set up security headers - AFTER CORS
 app.use(
@@ -58,6 +67,32 @@ app.use(
     crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
   }),
 );
+
+// Setup Socket.io
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  logger.info(`🔌 Client connected: ${socket.id}`);
+  
+  // Send immediate data on connection
+  const { items: latestNews, lastFetchedAt: newsLastFetched } = getCachedNews();
+  socket.emit("tracker_updated", {
+    ...liveTrackerData,
+    latestNews,
+    newsLastFetched,
+    _servedAt: new Date().toISOString(),
+  });
+
+  socket.on("disconnect", () => {
+    logger.info(`🔌 Client disconnected: ${socket.id}`);
+  });
+});
 
 // Apply HTTP logging middleware
 app.use(httpLogger);
@@ -77,7 +112,20 @@ app.use(express.json());
 app.use(limiter);
 
 // Use a mutable variable to hold the live data, initializing with static fallback
-let liveTrackerData: Record<string, unknown> = { ...staticTrackerData };
+import { TrackerData } from "./types";
+
+let liveTrackerData: TrackerData = { ...staticTrackerData };
+
+// Helper to broadcast full data via WebSocket
+function broadcastData() {
+  const { items: latestNews, lastFetchedAt: newsLastFetched } = getCachedNews();
+  io.emit("tracker_updated", {
+    ...liveTrackerData,
+    latestNews,
+    newsLastFetched,
+    _servedAt: new Date().toISOString(),
+  });
+}
 
 // Update tracker data (Gemini)
 async function updateTrackerData() {
@@ -86,6 +134,7 @@ async function updateTrackerData() {
     if (newData) {
       liveTrackerData = newData;
       logger.info("⬆️ Live tracker data updated successfully in memory.");
+      broadcastData();
     } else {
       logger.warn("⚠️ Keep using existing liveTrackerData.");
     }
@@ -99,6 +148,7 @@ async function updateNews() {
   try {
     await fetchLatestNews();
     logger.info("📰 News cache refreshed.");
+    broadcastData();
   } catch (error) {
     logger.error({ error }, "Failed to update news data");
   }
@@ -122,6 +172,7 @@ async function updateGasPrices() {
         { currentPrice: prices.currentPrice },
         "⛽ Gas prices merged into live data.",
       );
+      broadcastData();
     }
   } catch (error) {
     logger.error({ error }, "Failed to update gas prices");
@@ -151,6 +202,7 @@ app.get("/", (_req: Request, res: Response) => {
       trackerData: "Gemini Auto-Updates every 30 minutes",
       news: "Google News RSS every 30 minutes",
       gasPrices: "AAA + Brent crude every 15 minutes",
+      websockets: "Real-time updates enabled via Socket.io",
     },
     endpoints: {
       health: "/health",
@@ -251,6 +303,6 @@ process.on("unhandledRejection", (reason, promise) => {
   process.exit(1);
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  logger.info(`🚀 warspend API running on port ${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  logger.info(`🚀 warspend API with WebSockets running on port ${PORT}`);
 });

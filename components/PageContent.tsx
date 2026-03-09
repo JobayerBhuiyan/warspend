@@ -1,11 +1,12 @@
 "use client";
 
-import { useRealTimeData } from "@/components/RealTimeProvider";
-import { AnimatedCounter } from "@/components/AnimatedCounter";
-import { CountdownClock } from "@/components/CountdownClock";
-import { CostRates } from "@/components/CostRates";
-import { ScrollReveal } from "@/components/ScrollReveal";
-import { AdSense } from "@/components/AdSense";
+import { useRealTimeData } from "@/components/providers/RealTimeProvider";
+import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
+import { CountdownClock } from "@/components/shared/CountdownClock";
+import { CostRates } from "@/components/shared/CostRates";
+import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { AdSense } from "@/components/shared/AdSense";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import dynamic from "next/dynamic";
 import {
   ExternalLink,
@@ -17,7 +18,7 @@ import {
 
 const AlternativeMetrics = dynamic(
   () =>
-    import("@/components/AlternativeMetrics").then(
+    import("@/components/sections/AlternativeMetrics").then(
       (mod) => mod.AlternativeMetrics,
     ),
   {
@@ -33,31 +34,31 @@ const AlternativeMetrics = dynamic(
 
 const GasPriceTracker = dynamic(
   () =>
-    import("@/components/GasPriceTracker").then((mod) => mod.GasPriceTracker),
+    import("@/components/charts/GasPriceTracker").then((mod) => mod.GasPriceTracker),
   { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> },
 );
 
 const CostComparisonChart = dynamic(
   () =>
-    import("@/components/CostComparisonChart").then(
+    import("@/components/charts/CostComparisonChart").then(
       (mod) => mod.CostComparisonChart,
     ),
   { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> },
 );
 
 const CostTimeline = dynamic(
-  () => import("@/components/CostTimeline").then((mod) => mod.CostTimeline),
+  () => import("@/components/charts/CostTimeline").then((mod) => mod.CostTimeline),
   { loading: () => <div className="h-96 animate-pulse rounded-2xl glass" /> },
 );
 
 const LatestNews = dynamic(
-  () => import("@/components/LatestNews").then((mod) => mod.LatestNews),
+  () => import("@/components/sections/LatestNews").then((mod) => mod.LatestNews),
   { loading: () => <div className="h-64 animate-pulse rounded-2xl glass" /> },
 );
 
 const DonationSection = dynamic(
   () =>
-    import("@/components/DonationSection").then((mod) => mod.DonationSection),
+    import("@/components/sections/DonationSection").then((mod) => mod.DonationSection),
   { loading: () => <div className="h-48 animate-pulse rounded-2xl glass" /> },
 );
 
@@ -91,6 +92,9 @@ export function PageContent() {
         />
 
         <div className="mx-auto max-w-4xl px-4 pt-10 pb-12 sm:px-6 lg:px-8 text-center">
+          <div className="absolute top-4 right-4">
+            <ThemeToggle />
+          </div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold tracking-[0.1em] text-zinc-200 uppercase">
             Iran War Cost Tracker
           </h1>
@@ -116,7 +120,7 @@ export function PageContent() {
 
       <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8 space-y-12">
         {/* ─── Main Counter (LCP element - no ScrollReveal for faster paint) ─── */}
-        <section className="relative rounded-3xl bg-[#0d0a0f] p-8 sm:p-12 animate-pulse-glow overflow-hidden text-center ring-1 ring-red-900/30">
+        <section className="relative rounded-[2rem] bg-[#0a0a0f] p-8 sm:p-12 animate-pulse-glow overflow-hidden text-center">
           <div
             className="absolute inset-0 opacity-[0.015] pointer-events-none"
             style={{

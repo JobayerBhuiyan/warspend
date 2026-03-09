@@ -102,7 +102,7 @@ body::before {
 @keyframes pulse-glow-opacity {
   0%,
   100% {
-    opacity: 0.4;
+    opacity: 0.3;
   }
 
   50% {
@@ -155,21 +155,18 @@ body::before {
 
 .animate-pulse-glow {
   position: relative;
-  border: 1px solid rgba(239, 68, 68, 0.1) !important;
+  background-color: rgba(10, 10, 15, 0.9);
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
 }
 
 .animate-pulse-glow::after {
   content: "";
   position: absolute;
-  inset: -8px;
+  inset: -1px;
   border-radius: inherit;
-  background: transparent;
-  border: 2px solid rgba(239, 68, 68, 0.3);
-  box-shadow:
-    0 0 30px 8px rgba(239, 68, 68, 0.25),
-    0 0 60px 16px rgba(239, 68, 68, 0.1);
-  animation: pulse-glow-opacity 2.5s ease-in-out infinite;
-  will-change: opacity;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+  animation: pulse-glow-opacity 2s ease-in-out infinite;
   pointer-events: none;
   z-index: 1;
 }

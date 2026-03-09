@@ -1,6 +1,6 @@
 import { getTrackerData } from "@/lib/getTrackerData";
-import { RealTimeProvider } from "@/components/RealTimeProvider";
-import type { ClientTrackerData } from "@/components/RealTimeProvider";
+import { RealTimeProvider } from "@/components/providers/RealTimeProvider";
+import type { ClientTrackerData } from "@/components/providers/RealTimeProvider";
 import { PageContent } from "@/components/PageContent";
 
 export const revalidate = 60;
